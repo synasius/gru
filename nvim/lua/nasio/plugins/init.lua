@@ -1,0 +1,1 @@
+require("nasio.plugins.plugins")
