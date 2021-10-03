@@ -104,7 +104,7 @@ require("packer").startup(function()
 
 	use({
 		"neovim/nvim-lspconfig",
-		requires = "kabouzeid/nvim-lspinstall",
+		requires = "williamboman/nvim-lsp-installer",
 		config = function()
 			require("nasio.plugins.configs.lspconfig")
 		end,

@@ -1,6 +1,33 @@
 -- setup lspconfig
 local nvim_lsp = require("lspconfig")
 
+
+-- define custom diagnostics
+vim.fn.sign_define("DiagnosticSignWarn", { text = "", numhl = "DiagnosticSignWarn", texthl = "DiagnosticSignWarn" })
+vim.fn.sign_define(
+	"DiagnosticSignError",
+	{ text = "", numhl = "DiagnosticSignError", texthl = "DiagnosticSignError" }
+)
+vim.fn.sign_define("DiagnosticSignInfo", { text = "", numhl = "DiagnosticSignInfo", texthl = "DiagnosticSignInfo" })
+vim.fn.sign_define("DiagnosticSignHint", { text = "", numhl = "DiagnosticSignHint", texthl = "DiagnosticSignHint" })
+
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+	virtual_text = {
+		prefix = "",
+		spacing = 0,
+	},
+	signs = true,
+	underline = true,
+	update_in_insert = false, -- update diagnostics insert mode
+})
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+	border = "single",
+})
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+	border = "single",
+})
+
+
 local on_attach = function(client, bufnr)
 	local function buf_set_keymap(...)
 		vim.api.nvim_buf_set_keymap(bufnr, ...)
@@ -59,15 +86,6 @@ local on_attach = function(client, bufnr)
 	end
 end
 
--- Configure lua language server for neovim development
-local lua_settings = {
-	Lua = {
-		diagnostics = {
-			-- Get the language server to recognize the `vim` global
-			globals = { "vim", "use" },
-		},
-	},
-}
 
 -- config that activates keymaps and enables snippet support
 local function make_config()
@@ -89,69 +107,42 @@ local isort = require("nasio/efm/isort")
 local mypy = require("nasio/efm/mypy")
 local stylua = require("nasio/efm/stylua")
 
-local function setup_servers()
-	require("lspinstall").setup()
 
-	local servers = require("lspinstall").installed_servers()
-	-- manually installed servers are added here
+local lsp_installer = require("nvim-lsp-installer")
 
-	for _, server in pairs(servers) do
-		local config = make_config()
+lsp_installer.on_server_ready(function(server)
+    local opts = make_config()
 
-		-- here customize config for different servers
-		if server == "lua" then
-			config.settings = lua_settings
-		end
+    -- here customize config for different servers
+    if server == "lua" then
+      opts.settings = {
+        Lua = {
+          diagnostics = {
+            -- Get the language server to recognize the `vim` global
+            globals = { "vim", "use" },
+          },
+        },
+      }
+    end
 
-		if server == "efm" then
-			config.init_options = { documentFormatting = true }
-			config.root_dir = vim.loop.cwd
-			config.filetypes = { "python", "lua" }
-			config.settings = {
-				rootMarkers = { ".git/", "pyproject.toml" },
-				languages = {
-					python = { black, flake8, isort, mypy },
-					lua = { stylua },
-				},
-			}
-		end
+    if server == "efm" then
+      opts.init_options = { documentFormatting = true }
+      opts.root_dir = vim.loop.cwd
+      opts.filetypes = { "python", "lua" }
+      opts.settings = {
+        rootMarkers = { ".git/", "pyproject.toml" },
+        languages = {
+          python = { black, flake8, isort, mypy },
+          lua = { stylua },
+        },
+      }
+    end
 
-		nvim_lsp[server].setup(config)
-	end
-end
+    -- This setup() function is exactly the same as lspconfig's setup function (:help lspconfig-quickstart)
+    server:setup(opts)
+    vim.cmd([[ do User LspAttachBuffers ]])
+end)
 
-setup_servers()
-
--- define custom diagnostics
-vim.fn.sign_define("DiagnosticSignWarn", { text = "", numhl = "DiagnosticSignWarn", texthl = "DiagnosticSignWarn" })
-vim.fn.sign_define(
-	"DiagnosticSignError",
-	{ text = "", numhl = "DiagnosticSignError", texthl = "DiagnosticSignError" }
-)
-vim.fn.sign_define("DiagnosticSignInfo", { text = "", numhl = "DiagnosticSignInfo", texthl = "DiagnosticSignInfo" })
-vim.fn.sign_define("DiagnosticSignHint", { text = "", numhl = "DiagnosticSignHint", texthl = "DiagnosticSignHint" })
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-	virtual_text = {
-		prefix = "",
-		spacing = 0,
-	},
-	signs = true,
-	underline = true,
-	update_in_insert = false, -- update diagnostics insert mode
-})
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-	border = "single",
-})
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-	border = "single",
-})
-
--- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
-require("lspinstall").post_install_hook = function()
-	setup_servers() -- reload installed servers
-	vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
-end
 
 -- Also setup fluttertools
 require("flutter-tools").setup({
