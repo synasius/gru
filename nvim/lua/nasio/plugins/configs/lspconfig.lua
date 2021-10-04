@@ -1,7 +1,3 @@
--- setup lspconfig
-local nvim_lsp = require("lspconfig")
-
-
 -- define custom diagnostics
 vim.fn.sign_define("DiagnosticSignWarn", { text = "", numhl = "DiagnosticSignWarn", texthl = "DiagnosticSignWarn" })
 vim.fn.sign_define(
@@ -112,18 +108,6 @@ local lsp_installer = require("nvim-lsp-installer")
 
 lsp_installer.on_server_ready(function(server)
     local opts = make_config()
-
-    -- here customize config for different servers
-    if server == "lua" then
-      opts.settings = {
-        Lua = {
-          diagnostics = {
-            -- Get the language server to recognize the `vim` global
-            globals = { "vim", "use" },
-          },
-        },
-      }
-    end
 
     if server == "efm" then
       opts.init_options = { documentFormatting = true }
