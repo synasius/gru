@@ -1,5 +1,6 @@
 #!/usr/bin/env fish
 
+set -l script_dir (realpath (dirname (status -f)))
 
 function read_confirm --description 'Ask the user for confirmation' --argument prompt
   if test -z "$prompt"
@@ -21,6 +22,28 @@ function read_confirm --description 'Ask the user for confirmation' --argument p
 end
 
 
+function backup_and_link -d 'Link file or directory and create backup when directory exitsts' -a source dest
+
+  if test -e $dest && test ! -L $dest
+    echo "Backup directory at $dest"
+    mv $dest $dest.bkp
+  end
+  if test ! -L $dest
+    ln -s $source $dest
+  else
+    echo "Link at $dest already exists"
+  end
+end
+
+
+if read_confirm "Linking dotfiles and configurations"
+  backup_and_link $script_dir/fish $HOME/.config/fish
+  backup_and_link $script_dir/kitty $HOME/.config/kitty
+  backup_and_link $script_dir/nvim $HOME/.config/nvim
+  backup_and_link $script_dir/.gitconfig.local $HOME/.gitconfig.local
+end
+
+
 if read_confirm "Install/Upgrade packages from apt"
   begin
     set --local ppa_repositories \
@@ -37,6 +60,7 @@ if read_confirm "Install/Upgrade packages from apt"
 
     set --local apt_packages \
       appimagelauncher \
+      curl \
       docker.io \
       docker-compose \
       git \
@@ -63,7 +87,6 @@ end
 
 if read_confirm "Install packages from snap"
   snap install spotify
-  # TODO: copy desktop file from snapd and substitute command
 
   snap install google-cloud-sdk --classic
   sudo snap alias google-cloud-sdk.kubectl kubectl
@@ -145,12 +168,23 @@ if read_confirm "Install/Upgrade Nerd Fonts"
       "SemiBold/complete/Fira%20Code%20SemiBold%20Nerd%20Font%20Complete.ttf" \
       "Retina/complete/Fira%20Code%20Retina%20Nerd%20Font%20Complete.ttf"
 
-    cd ~/.local/share/fonts/
-    mkdir -p NerdFonts
-    cd NerdFonts
+    mkdir -p $HOME/.local/share/fonts/NerdFonts
+
+    if test -d /tmp/NerdFonts
+      rm -f /tmp/NerdFonts
+    end
+
+    mkdir -p /tmp/NerdFonts
+    cd /tmp/NerdFonts
 
     for font in $nerd_fonts_to_download
       curl -LO $nerd_font_base_url$font
+    end
+
+    cp /tmp/NerdFonts/*.ttf $HOME/.local/share/fonts/NerdFonts
+
+    if test -d /tmp/NerdFonts
+      rm -f /tmp/NerdFonts
     end
   end
 end
