@@ -60,18 +60,22 @@ if read_confirm "Install/Upgrade packages from apt"
 
     set --local apt_packages \
       appimagelauncher \
+      build-essential \
       curl \
       docker.io \
       docker-compose \
       git \
       git-lfs \
+      make \
       neovim \
       python3-dev \
       python3-venv \
       python3-virtualenv \
       postgresql-client \
       ripgrep \
+      steam \
       tree \
+      xclip \
       xvfb
 
     sudo apt install $apt_packages
