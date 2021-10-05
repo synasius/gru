@@ -150,6 +150,10 @@ if read_confirm "Install/Upgrade pyenv"
   else
     echo Install Pyenv
     curl https://pyenv.run | bash
+
+    sudo apt-get update; sudo apt-get install libssl-dev zlib1g-dev \
+      libbz2-dev libreadline-dev libsqlite3-dev llvm \
+      libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
   end
 end
 
