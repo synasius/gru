@@ -1,3 +1,3 @@
-fish_add_path $HOME/.cargo/bin
+fish_add_path $HOME/.fnm
 
 fnm env | source
