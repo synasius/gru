@@ -90,17 +90,18 @@ end
 
 
 if read_confirm "Install packages from snap"
-  snap install spotify
+  sudo snap install spotify
+  sudo snap install discord
 
-  snap install google-cloud-sdk --classic
+  sudo snap install google-cloud-sdk --classic
   sudo snap alias google-cloud-sdk.kubectl kubectl
 
-  snap install helm --classic
+  sudo snap install helm --classic
 end
 
 
 if read_confirm "Install Unity dev environment"
-  snap install code --classic
+  sudo snap install code --classic
 
   sudo snap install dotnet-sdk --classic --channel=lts/stable
   sudo snap alias dotnet-sdk.dotnet dotnet
