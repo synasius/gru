@@ -191,7 +191,7 @@ if read_confirm "Install/Upgrade Nerd Fonts"
     mkdir -p $HOME/.local/share/fonts/NerdFonts
 
     if test -d /tmp/NerdFonts
-      rm -f /tmp/NerdFonts
+      rm -rf /tmp/NerdFonts
     end
 
     mkdir -p /tmp/NerdFonts
@@ -204,7 +204,7 @@ if read_confirm "Install/Upgrade Nerd Fonts"
     cp /tmp/NerdFonts/*.ttf $HOME/.local/share/fonts/NerdFonts
 
     if test -d /tmp/NerdFonts
-      rm -f /tmp/NerdFonts
+      rm -rf /tmp/NerdFonts
     end
   end
 end
