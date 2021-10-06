@@ -97,12 +97,12 @@ local function make_config()
 	}
 end
 
-local black = require("nasio/efm/black")
-local flake8 = require("nasio/efm/flake8")
-local isort = require("nasio/efm/isort")
-local mypy = require("nasio/efm/mypy")
-local stylua = require("nasio/efm/stylua")
 
+local black = require("nasio.plugins.configs.efm.black")
+local flake8 = require("nasio.plugins.configs.efm.flake8")
+local isort = require("nasio.plugins.configs.efm.isort")
+local mypy = require("nasio.plugins.configs.efm.mypy")
+local stylua = require("nasio.plugins.configs.efm.stylua")
 
 local lsp_installer = require("nvim-lsp-installer")
 
