@@ -83,6 +83,11 @@ if read_confirm "Install/Upgrade packages from apt"
 end
 
 
+if read_confirm "Run docker setup"
+  sudo usermod -aG docker $USER
+end
+
+
 if read_confirm "Run fish setup"
   # Download fish completion since `kubectl` does not export completion for Fish
   curl -sLo $HOME/.config/fish/completions/kubectl.fish https://raw.githubusercontent.com/evanlucas/fish-kubectl-completions/main/completions/kubectl.fish
