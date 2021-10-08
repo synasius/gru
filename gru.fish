@@ -167,7 +167,7 @@ if read_confirm "Install/Upgrade poetry"
   if type -q poetry
     poetry self update
   else
-    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3 - --version=1.1.10
+    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3 - --version=1.1.11
   end
   $HOME/.local/bin/poetry completions fish > $HOME/.config/fish/completions/poetry.fish
 end
