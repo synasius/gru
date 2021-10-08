@@ -1,3 +1,5 @@
+local colors = require("tokyonight.colors").setup({})
+
 -- define custom diagnostics
 vim.fn.sign_define("DiagnosticSignWarn", { text = "", numhl = "DiagnosticSignWarn", texthl = "DiagnosticSignWarn" })
 vim.fn.sign_define(
@@ -10,7 +12,7 @@ vim.fn.sign_define("DiagnosticSignHint", { text = "", numhl = "DiagnosticSign
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
 	virtual_text = {
 		prefix = "",
-		spacing = 0,
+		spacing = 4,
 	},
 	signs = true,
 	underline = true,
@@ -66,18 +68,17 @@ local on_attach = function(client, bufnr)
 
 	-- Set autocommands conditional on server_capabilities
 	if client.resolved_capabilities.document_highlight then
-		vim.api.nvim_exec(
-			[[
-      hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
-      hi LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
-      hi LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
+		vim.cmd([[hi LspReferenceRead cterm=bold ctermbg=red guibg=]] .. colors.dark3)
+		vim.cmd([[hi LspReferenceText cterm=bold ctermbg=red guibg=]] .. colors.dark3)
+    vim.cmd([[hi LspReferenceWrite cterm=bold ctermbg=red guibg=]] .. colors.dark3)
+    vim.cmd(
+      [[
       augroup lsp_document_highlight
         autocmd! * <buffer>
         autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
         autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
       augroup END
-    ]],
-			false
+    ]]
 		)
 	end
 end
