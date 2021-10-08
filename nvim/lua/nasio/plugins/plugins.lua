@@ -129,7 +129,6 @@ require("packer").startup(function()
 	use({
 		"kyazdani42/nvim-tree.lua",
 		requires = { "kyazdani42/nvim-web-devicons" },
-		cmd = { "NvimTreeToggle", "NvimTreeFocus" },
 		config = function()
 			require("nasio.plugins.configs.nvimtree")
 		end,
