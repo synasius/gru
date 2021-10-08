@@ -66,6 +66,8 @@ if read_confirm "Install/Upgrade packages from apt"
       docker-compose \
       git \
       git-lfs \
+      golang \
+      libpq-dev \
       make \
       neovim \
       python3-dev \
