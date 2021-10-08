@@ -1,6 +1,5 @@
 local cmp = require("cmp")
 local luasnip = require("luasnip")
-local lspkind = require("lspkind")
 
 local t = function(str)
 	return vim.api.nvim_replace_termcodes(str, true, true, true)
@@ -21,20 +20,13 @@ cmp.setup({
 		end,
 	},
 	formatting = {
-		format = function(entry, vim_item)
-			-- fancy icons and a name of kind
-			vim_item.kind = lspkind.presets.default[vim_item.kind] .. " " .. vim_item.kind
-			-- set a name for each source
-			vim_item.menu = ({
-				buffer = "[Buffer]",
-				nvim_lsp = "[LSP]",
-				luasnip = "[LuaSnip]",
-				nvim_lua = "[Lua]",
-				path = "[Path]",
-			})[entry.source.name]
-
-			return vim_item
-		end,
+		format = require("lspkind").cmp_format({with_text = true, menu = ({
+      buffer = "[Buffer]",
+      nvim_lsp = "[LSP]",
+      luasnip = "[LuaSnip]",
+      nvim_lua = "[Lua]",
+      path = "[Path]",
+    })}),
 	},
 	-- You can set mappings if you want
 	mapping = {
