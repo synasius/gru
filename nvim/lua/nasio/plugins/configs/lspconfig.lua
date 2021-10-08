@@ -110,7 +110,22 @@ local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
     local opts = make_config()
 
-    if server == "efm" then
+    if server.name == "pylsp" then
+      opts.settings = {
+        pylsp = {
+          plugins = {
+            flake8 = { enabled = false },
+            pyflakes = { enabled = true },
+            pylint = { enabled = false },
+            yapf = { enabled = false },
+            pydocstyle = { enabled = false },
+            pycodestyle = { enabled = false }
+          }
+        }
+      }
+    end
+
+    if server.name == "efm" then
       opts.init_options = { documentFormatting = true }
       opts.root_dir = vim.loop.cwd
       opts.filetypes = { "python", "lua" }
