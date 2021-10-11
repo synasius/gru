@@ -60,15 +60,19 @@ if read_confirm "Install/Upgrade packages from apt"
 
     set --local apt_packages \
       appimagelauncher \
+      apt-transport-https \
       build-essential \
       curl \
+      ca-certificates \
       docker.io \
       docker-compose \
       git \
       git-lfs \
+      gnupg \
       golang \
       libpq-dev \
       make \
+      mesa-utils \
       neovim \
       python3-dev \
       python3-venv \
@@ -77,6 +81,7 @@ if read_confirm "Install/Upgrade packages from apt"
       ripgrep \
       steam \
       tree \
+      vulkan-tools \
       xclip \
       xvfb
 
@@ -99,11 +104,17 @@ end
 if read_confirm "Install packages from snap"
   sudo snap install spotify
   sudo snap install discord
-
-  sudo snap install google-cloud-sdk --classic
-  sudo snap alias google-cloud-sdk.kubectl kubectl
-
   sudo snap install helm --classic
+end
+
+
+if read_confirm "Setup Google Cloud SDK and tools"
+  if test ! -f /etc/apt/sources.list.d/google-cloud-sdk.list
+    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+    sudo apt update
+    sudo apt install google-cloud-sdk kubectl
+  end
 end
 
 
