@@ -88,6 +88,7 @@ local flake8 = require("nasio.plugins.configs.efm.flake8")
 local isort = require("nasio.plugins.configs.efm.isort")
 local mypy = require("nasio.plugins.configs.efm.mypy")
 local stylua = require("nasio.plugins.configs.efm.stylua")
+local prettier = require("nasio.plugins.configs.efm.prettier")
 
 local lsp_installer = require("nvim-lsp-installer")
 
@@ -112,12 +113,15 @@ lsp_installer.on_server_ready(function(server)
     if server.name == "efm" then
       opts.init_options = { documentFormatting = true }
       opts.root_dir = vim.loop.cwd
-      opts.filetypes = { "python", "lua" }
+      opts.filetypes = { "python", "lua", "javascript", "typescript", "html" }
       opts.settings = {
         rootMarkers = { ".git/", "pyproject.toml" },
         languages = {
           python = { black, flake8, isort, mypy },
           lua = { stylua },
+          javascript = { prettier },
+          typescript = { prettier },
+          html = { prettier },
         },
       }
     end
