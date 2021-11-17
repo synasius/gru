@@ -45,48 +45,46 @@ end
 
 
 if read_confirm "Install/Upgrade packages from apt"
-  begin
-    set --local ppa_repositories \
-      ppa:appimagelauncher-team/stable \
-      ppa:fish-shell/release-3 \
-      ppa:neovim-ppa/unstable
+  set --local ppa_repositories \
+    ppa:appimagelauncher-team/stable \
+    ppa:fish-shell/release-3 \
+    ppa:neovim-ppa/unstable
 
-    for ppa in $ppa_repositories
-      sudo add-apt-repository $ppa -n -y
-    end
-
-    sudo apt update && sudo apt upgrade
-    sudo apt autoremove
-
-    set --local apt_packages \
-      appimagelauncher \
-      apt-transport-https \
-      build-essential \
-      curl \
-      ca-certificates \
-      docker.io \
-      docker-compose \
-      git \
-      git-lfs \
-      gnupg \
-      golang \
-      libpq-dev \
-      make \
-      mesa-utils \
-      neovim \
-      python3-dev \
-      python3-venv \
-      python3-virtualenv \
-      postgresql-client \
-      ripgrep \
-      steam \
-      tree \
-      vulkan-tools \
-      xclip \
-      xvfb
-
-    sudo apt install $apt_packages
+  for ppa in $ppa_repositories
+    sudo add-apt-repository $ppa -n -y
   end
+
+  sudo apt update && sudo apt upgrade
+  sudo apt autoremove
+
+  set --local apt_packages \
+    appimagelauncher \
+    apt-transport-https \
+    build-essential \
+    curl \
+    ca-certificates \
+    docker.io \
+    docker-compose \
+    git \
+    git-lfs \
+    gnupg \
+    golang \
+    libpq-dev \
+    make \
+    mesa-utils \
+    neovim \
+    python3-dev \
+    python3-venv \
+    python3-virtualenv \
+    postgresql-client \
+    ripgrep \
+    steam \
+    tree \
+    vulkan-tools \
+    xclip \
+    xvfb
+
+  sudo apt install $apt_packages
 end
 
 
@@ -214,33 +212,31 @@ end
 
 
 if read_confirm "Install/Upgrade Nerd Fonts"
-  begin
-    set --local nerd_font_base_url "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/"
-    set --local nerd_fonts_to_download \
-      "Bold/complete/Fira%20Code%20Bold%20Nerd%20Font%20Complete.ttf" \
-      "Medium/complete/Fira%20Code%20Medium%20Nerd%20Font%20Complete.ttf" \
-      "Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf" \
-      "SemiBold/complete/Fira%20Code%20SemiBold%20Nerd%20Font%20Complete.ttf" \
-      "Retina/complete/Fira%20Code%20Retina%20Nerd%20Font%20Complete.ttf"
+  set --local nerd_font_base_url "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/"
+  set --local nerd_fonts_to_download \
+    "Bold/complete/Fira%20Code%20Bold%20Nerd%20Font%20Complete.ttf" \
+    "Medium/complete/Fira%20Code%20Medium%20Nerd%20Font%20Complete.ttf" \
+    "Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf" \
+    "SemiBold/complete/Fira%20Code%20SemiBold%20Nerd%20Font%20Complete.ttf" \
+    "Retina/complete/Fira%20Code%20Retina%20Nerd%20Font%20Complete.ttf"
 
-    mkdir -p $HOME/.local/share/fonts/NerdFonts
+  mkdir -p $HOME/.local/share/fonts/NerdFonts
 
-    if test -d /tmp/NerdFonts
-      rm -rf /tmp/NerdFonts
-    end
+  if test -d /tmp/NerdFonts
+    rm -rf /tmp/NerdFonts
+  end
 
-    mkdir -p /tmp/NerdFonts
-    cd /tmp/NerdFonts
+  mkdir -p /tmp/NerdFonts
+  cd /tmp/NerdFonts
 
-    for font in $nerd_fonts_to_download
-      curl -LO $nerd_font_base_url$font
-    end
+  for font in $nerd_fonts_to_download
+    curl -LO $nerd_font_base_url$font
+  end
 
-    cp /tmp/NerdFonts/*.ttf $HOME/.local/share/fonts/NerdFonts
+  cp /tmp/NerdFonts/*.ttf $HOME/.local/share/fonts/NerdFonts
 
-    if test -d /tmp/NerdFonts
-      rm -rf /tmp/NerdFonts
-    end
+  if test -d /tmp/NerdFonts
+    rm -rf /tmp/NerdFonts
   end
 end
 
@@ -265,4 +261,28 @@ if read_confirm "Install Brave Browser"
   sudo apt update
 
   sudo apt install brave-browser
+end
+
+function install_from_github --description 'Install from github' --argument repository download_pattern
+  set --local temporary_download_dir /tmp/gru/(string replace / - $repository)
+
+  echo "Installing from" $repository "release" (gh release -R $repository view --json name --jq '.name')
+
+  mkdir -p $temporary_download_dir
+
+  gh release -R $repository download \
+    -p $download_pattern \
+    -D $temporary_download_dir
+
+  sudo apt install $temporary_download_dir/*.deb
+
+  rm -rd $temporary_download_dir
+end
+
+if read_confirm "Install/Upgrade fd"
+  install_from_github sharkdp/fd 'fd-musl*_amd64.deb'
+end
+
+if read_confirm "Install/Upgrade SOPS"
+  install_from_github mozilla/sops 'sops_*_amd64.deb'
 end
