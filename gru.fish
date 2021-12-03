@@ -69,10 +69,12 @@ if read_confirm "Install/Upgrade packages from apt"
     git-lfs \
     gnupg \
     golang \
+    graphicsmagick-imagemagick-compat \
     libpq-dev \
     make \
     mesa-utils \
     neovim \
+    optipng \
     python3-dev \
     python3-venv \
     python3-virtualenv \
@@ -195,7 +197,7 @@ if read_confirm "Install/Upgrade poetry"
   if type -q poetry
     poetry self update
   else
-    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3 - --version=1.1.11
+    curl -sSL https://install.python-poetry.org | python3 - --version=1.1.12
   end
   $HOME/.local/bin/poetry completions fish > $HOME/.config/fish/completions/poetry.fish
 end

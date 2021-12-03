@@ -29,63 +29,8 @@ require("bufferline").setup({
 	-- colors setup
 	-- for additional highlights see :help bufferline-highlights
 	highlights = {
-		fill = {
-			guibg = colors.bg_dark,
-		},
-		background = {
-			guibg = colors.bg_dark,
-		},
-
-		buffer_selected = {
-			gui = "bold",
-		},
-		buffer_visible = {
-			guifg = colors.dark3,
-			guibg = colors.bg_dark,
-		},
-		indicator_selected = {
-			guifg = colors.bg,
-			guibg = colors.bg,
-		},
-
-		close_button = {
-			guifg = colors.dark3,
-			guibg = colors.bg_dark,
-		},
-		close_button_visible = {
-			guifg = colors.dark3,
-			guibg = colors.bg_dark,
-		},
-		close_button_selected = {
-			guifg = colors.red,
-			guibg = colors.bg,
-		},
-
-		separator = {
-			guifg = colors.dark3,
-			guibg = colors.bg_dark,
-		},
-		separator_visible = {
-			guifg = colors.dark3,
-			guibg = colors.bg_dark,
-		},
-		separator_selected = {
-			guifg = colors.dark3,
-			guibg = colors.bg,
-		},
-
-		-- modified
-		modified = {
-			guifg = colors.red,
-			guibg = colors.bg_dark,
-		},
-		modified_visible = {
-			guifg = colors.red,
-			guibg = colors.bg_dark,
-		},
-		modified_selected = {
-			guifg = colors.green,
-			guibg = colors.bg,
-		},
-	},
+    fill = {
+      guibg = colors.bg_dark
+    }
+  }
 })

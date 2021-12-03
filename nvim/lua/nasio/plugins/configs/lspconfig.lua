@@ -85,6 +85,7 @@ end
 
 local black = require("nasio.plugins.configs.efm.black")
 local flake8 = require("nasio.plugins.configs.efm.flake8")
+local pylint = require("nasio.plugins.configs.efm.pylint")
 local isort = require("nasio.plugins.configs.efm.isort")
 local mypy = require("nasio.plugins.configs.efm.mypy")
 local stylua = require("nasio.plugins.configs.efm.stylua")
@@ -99,12 +100,9 @@ lsp_installer.on_server_ready(function(server)
       opts.settings = {
         pylsp = {
           plugins = {
-            flake8 = { enabled = false },
             pyflakes = { enabled = true },
-            pylint = { enabled = false },
-            yapf = { enabled = false },
-            pydocstyle = { enabled = false },
-            pycodestyle = { enabled = false }
+            pycodestyle = { enabled = false },
+            yapf = { enabled = false }
           }
         }
       }
@@ -117,7 +115,7 @@ lsp_installer.on_server_ready(function(server)
       opts.settings = {
         rootMarkers = { ".git/", "pyproject.toml" },
         languages = {
-          python = { black, flake8, isort, mypy },
+          python = { black, flake8, isort, mypy, pylint },
           lua = { stylua },
           javascript = { prettier },
           typescript = { prettier },
