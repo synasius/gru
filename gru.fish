@@ -213,6 +213,16 @@ if read_confirm "Install/Upgrade tox"
 end
 
 
+if read_confirm "Install/Upgrade awscli"
+  if test ! -d $HOME/.awscli
+    python3 -m venv $HOME/.awscli
+  end
+  source $HOME/.awscli/bin/activate.fish
+  pip install --upgrade awscli
+  deactivate
+end
+
+
 if read_confirm "Install/Upgrade Nerd Fonts"
   set --local nerd_font_base_url "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/"
   set --local nerd_fonts_to_download \
