@@ -5,6 +5,7 @@ set SCRIPT_DIR (realpath (dirname (status -f)))
 
 source $SCRIPT_DIR/modules/common.fish
 
+
 function install_package -a package
   if test -z (yay -Q $package)
     echo "Install" $package
@@ -15,6 +16,7 @@ function install_package -a package
     return 1
   end
 end
+
 
 function setup_git
   if install_package git-lfs
@@ -70,10 +72,22 @@ function setup_fnm
 end
 
 
+function setup_docker
+  install_package docker
+  install_package docker-compose
+
+  if test -z (groups | grep docker)
+    echo "Add" $USER "to group docker"
+    sudo usermod -aG docker $USER
+  end
+end
+
+
 install_package optimus-manager
 install_package optimus-manager-qt
 
 # TODO:  nvidia-installer-dkms
+install_package steam
 
 install_package nerd-fonts-fira-code
 install_package starship
@@ -86,6 +100,18 @@ install_package pngquant
 install_package dua-cli
 install_package bottom
 
+install_package google-cloud-sdk
+install_package kubectl
+install_package sops
+install_package aws-cli
+
+install_package python-poetry
+install_package pyenv
+
+# libraries
+install_package postgresql-libs
+
+
 setup_git
 setup_neovim
 
@@ -93,3 +119,5 @@ setup_fish
 setup_kitty
 
 setup_fnm
+
+setup_docker
