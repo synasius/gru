@@ -87,6 +87,7 @@ install_package optimus-manager
 install_package optimus-manager-qt
 
 # TODO:  nvidia-installer-dkms
+
 install_package steam
 
 install_package nerd-fonts-fira-code
@@ -99,25 +100,24 @@ install_package fd
 install_package pngquant
 install_package dua-cli
 install_package bottom
+install_package exa
 
+# cloud
 install_package google-cloud-sdk
 install_package kubectl
 install_package sops
 install_package aws-cli
 
+# development
+setup_docker
 install_package python-poetry
+install_package python-tox
 install_package pyenv
-
-# libraries
 install_package postgresql-libs
-
+install_package go
 
 setup_git
 setup_neovim
-
 setup_fish
 setup_kitty
-
 setup_fnm
-
-setup_docker
