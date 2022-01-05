@@ -9,7 +9,7 @@ require("packer").startup(function()
 	})
 
 	use({
-		"famiu/feline.nvim",
+		"feline-nvim/feline.nvim",
 		requires = "kyazdani42/nvim-web-devicons",
 		config = function()
 			require("nasio.plugins.configs.statusline")

@@ -1,5 +1,5 @@
 return {
-	lintCommand = "mypy --show-column-numbers --strict --namespace-packages",
+	lintCommand = "mypy --show-column-numbers --namespace-packages",
 	lintFormats = {
 		"%f:%l:%c: %trror: %m",
 		"%f:%l:%c: %tarning: %m",
