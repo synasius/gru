@@ -85,6 +85,11 @@ end
 
 function setup_unity
   install_package cpio
+  install_package visual-studio-code-bin
+  install_package dotnet-runtime
+  install_package dotnet-sdk
+  install_package mono-msbuild
+  install_package mono
 end
 
 
