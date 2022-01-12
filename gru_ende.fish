@@ -84,6 +84,8 @@ end
 
 
 function setup_unity
+  # TODO: maybe we can install unity-hub-beta package???
+  # or download the app image
   install_package cpio
   install_package visual-studio-code-bin
   install_package dotnet-runtime
@@ -92,6 +94,21 @@ function setup_unity
   install_package mono
 end
 
+
+function setup_flutter
+  install_package flutter
+  if test -z (groups | grep flutterusers)
+    sudo gpasswd -a $USER flutterusers
+    newgrp flutterusers
+  end
+
+  install_package android-studio
+  install_package google-chrome
+end
+
+# TODO: setup keyboard options
+# /etc/default/keyboard
+# /etc/X11/xorg.conf.d/00-keyboard.conf
 
 install_package optimus-manager
 install_package optimus-manager-qt
@@ -139,3 +156,4 @@ setup_fish
 setup_kitty
 setup_fnm
 setup_unity
+setup_flutter
