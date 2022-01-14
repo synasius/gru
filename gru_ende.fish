@@ -135,6 +135,7 @@ install_package pngquant
 install_package dua-cli
 install_package bottom
 install_package exa
+install_package foliate
 
 # cloud
 install_package google-cloud-sdk
