@@ -1,300 +1,185 @@
 #!/usr/bin/env fish
 
-set -l script_dir (realpath (dirname (status -f)))
-
-function read_confirm --description 'Ask the user for confirmation' --argument prompt
-  if test -z "$prompt"
-    set prompt "Continue?"
-  end
-
-  while true
-    read -p 'set_color green; echo -n "$prompt [y/N/q]: "; set_color normal' -l confirm
-
-    switch $confirm
-      case Y y
-        return 0
-      case '' N n
-        return 1
-      case q Q
-        exit 0
-    end
-  end
-end
+set SCRIPT_DIR (realpath (dirname (status -f)))
 
 
-function backup_and_link -d 'Link file or directory and create backup when directory exitsts' -a source dest
+source $SCRIPT_DIR/modules/common.fish
 
-  if test -e $dest && test ! -L $dest
-    echo "Backup directory at $dest"
-    mv $dest $dest.bkp
-  end
-  if test ! -L $dest
-    ln -s $source $dest
+
+function install_package -a package
+  if test -z (yay -Q $package)
+    echo "Install" $package
+    yay -S $package
+    return 0
   else
-    echo "Link at $dest already exists"
+    echo $package "already installed"
+    return 1
   end
 end
 
 
-if read_confirm "Linking dotfiles and configurations"
-  backup_and_link $script_dir/fish $HOME/.config/fish
-  backup_and_link $script_dir/kitty $HOME/.config/kitty
-  backup_and_link $script_dir/nvim $HOME/.config/nvim
-  backup_and_link $script_dir/.gitconfig.local $HOME/.gitconfig.local
-end
-
-
-if read_confirm "Install/Upgrade packages from apt"
-  set --local ppa_repositories \
-    ppa:appimagelauncher-team/stable \
-    ppa:fish-shell/release-3 \
-    ppa:neovim-ppa/unstable
-
-  for ppa in $ppa_repositories
-    sudo add-apt-repository $ppa -n -y
+function setup_git
+  if install_package git-lfs
+    echo "Setup git-lfs"
+    git lfs install
   end
 
-  sudo apt update && sudo apt upgrade
-  sudo apt autoremove
+  if test ! -L $HOME/.gitconfig.local
+    echo "Linking gitconfig"
+    ln -s $SCRIPT_DIR/.gitconfig.local $HOME/.gitconfig.local
 
-  set --local apt_packages \
-    appimagelauncher \
-    apt-transport-https \
-    build-essential \
-    curl \
-    ca-certificates \
-    docker.io \
-    docker-compose \
-    git \
-    git-lfs \
-    gnupg \
-    golang \
-    graphicsmagick-imagemagick-compat \
-    libpq-dev \
-    make \
-    mesa-utils \
-    neovim \
-    optipng \
-    python3-dev \
-    python3-venv \
-    python3-virtualenv \
-    postgresql-client \
-    ripgrep \
-    steam \
-    tree \
-    vulkan-tools \
-    xclip \
-    xvfb
+    git config --global include.path $HOME/.gitconfig.local
 
-  sudo apt install $apt_packages
-end
+    read -p 'set_color green; echo -n "Git user name: "; set_color normal' -l user_name
+    read -p 'set_color green; echo -n "Git user email: "; set_color normal' -l user_email
 
-
-if read_confirm "Run docker setup"
-  sudo usermod -aG docker $USER
-end
-
-
-if read_confirm "Run fish setup"
-  # Download fish completion since `kubectl` does not export completion for Fish
-  curl -sLo $HOME/.config/fish/completions/kubectl.fish https://raw.githubusercontent.com/evanlucas/fish-kubectl-completions/main/completions/kubectl.fish
-end
-
-
-if read_confirm "Install packages from snap"
-  sudo snap install spotify
-  sudo snap install discord
-  sudo snap install helm --classic
-end
-
-
-if read_confirm "Setup Google Cloud SDK and tools"
-  if test ! -f /etc/apt/sources.list.d/google-cloud-sdk.list
-    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-    sudo apt update
-    sudo apt install google-cloud-sdk kubectl
-
-    gcloud init
-    gcloud auth application-default login
+    git config --global user.name $user_name
+    git config --global user.email $user_email
   end
 end
 
 
-if read_confirm "Setup github CLI"
-  if test ! -f /etc/apt/sources.list.d/github-cli.list
-    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
-    echo "deb [arch="(dpkg --print-architecture)" signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-    sudo apt update
-    sudo apt install gh
+function setup_neovim
+  install_package neovim
 
-    gh auth login
-    gh config set editor nvim
-  end
-  gh completion -s fish > $HOME/.config/fish/completions/gh.fish
-end
+  backup_and_link $SCRIPT_DIR/nvim $HOME/.config/nvim
 
-
-if read_confirm "Install Unity dev environment"
-  sudo snap install code --classic
-
-  sudo snap install dotnet-sdk --classic --channel=lts/stable
-  sudo snap alias dotnet-sdk.dotnet dotnet
-  sudo ln -s /snap/dotnet-sdk/current/dotnet /usr/local/bin/dotnet
-
-  sudo apt install gnupg ca-certificates
-  sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-  echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
-  sudo apt update
-  sudo apt install mono-complete
-end
-
-
-if read_confirm "Install/Upgrade Kitty"
-  curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
-  if test ! -L ~/.local/bin/kitty
-    # Create a symbolic link to add kitty to PATH (assuming ~/.local/bin is in
-    # your PATH)
-    ln -s ~/.local/kitty.app/bin/kitty ~/.local/bin/
-    # Place the kitty.desktop file somewhere it can be found by the OS
-    cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
-    # Update the path to the kitty icon in the kitty.desktop file
-    sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty.desktop
-
-    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator ~/.local/bin/kitty 50
+  if read_confirm "Install/Upgrade Neovim Plugins"
+    nvim --noplugin +PackerSync +qa
   end
 end
 
 
-if read_confirm "Install/Upgrade Starship"
-  sh -c (curl -fsSL https://starship.rs/install.sh | string collect) -- --yes
-  starship completions fish > $HOME/.config/fish/completions/starship.fish
+function setup_kitty
+  install_package kitty
+
+  backup_and_link $SCRIPT_DIR/kitty $HOME/.config/kitty
 end
 
 
-if read_confirm "Install/Upgrade FNM"
-  curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
-  fnm completions --shell fish > $HOME/.config/fish/completions/fnm.fish
+function setup_fish
+  set -l fish_shell_passwd (grep -E $USER".*fish" /etc/passwd | string trim)
+  if test -z $fish_shell_passwd
+    chsh -s (which fish)
+  end
+
+  backup_and_link $SCRIPT_DIR/fish $HOME/.config/fish
 end
 
 
-if read_confirm "Install/Upgrade pyenv"
-  if type -q pyenv
-    echo Upgrade pyenv
-    pyenv update
-  else
-    echo Install Pyenv
-    curl https://pyenv.run | bash
+function setup_fnm
+  if read_confirm "Install/Upgrade FNM"
+    curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
 
-    sudo apt-get update; sudo apt-get install libssl-dev zlib1g-dev \
-      libbz2-dev libreadline-dev libsqlite3-dev llvm \
-      libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+    $HOME/.fnm/fnm completions --shell fish > $HOME/.config/fish/completions/fnm.fish
   end
 end
 
 
-if read_confirm "Install/Upgrade poetry"
-  if type -q poetry
-    poetry self update
-  else
-    curl -sSL https://install.python-poetry.org | python3 - --version=1.1.12
-  end
-  $HOME/.local/bin/poetry completions fish > $HOME/.config/fish/completions/poetry.fish
-end
+function setup_docker
+  install_package docker
+  install_package docker-compose
 
-
-if read_confirm "Install/Upgrade tox"
-  if test ! -d $HOME/.tox
-    python3 -m venv $HOME/.tox
-  end
-  source $HOME/.tox/bin/activate.fish
-  pip install --upgrade tox
-  deactivate
-end
-
-
-if read_confirm "Install/Upgrade awscli"
-  if test ! -d $HOME/.awscli
-    python3 -m venv $HOME/.awscli
-  end
-  source $HOME/.awscli/bin/activate.fish
-  pip install --upgrade awscli
-  deactivate
-end
-
-
-if read_confirm "Install/Upgrade Nerd Fonts"
-  set --local nerd_font_base_url "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/"
-  set --local nerd_fonts_to_download \
-    "Bold/complete/Fira%20Code%20Bold%20Nerd%20Font%20Complete.ttf" \
-    "Medium/complete/Fira%20Code%20Medium%20Nerd%20Font%20Complete.ttf" \
-    "Regular/complete/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf" \
-    "SemiBold/complete/Fira%20Code%20SemiBold%20Nerd%20Font%20Complete.ttf" \
-    "Retina/complete/Fira%20Code%20Retina%20Nerd%20Font%20Complete.ttf"
-
-  mkdir -p $HOME/.local/share/fonts/NerdFonts
-
-  if test -d /tmp/NerdFonts
-    rm -rf /tmp/NerdFonts
-  end
-
-  mkdir -p /tmp/NerdFonts
-  cd /tmp/NerdFonts
-
-  for font in $nerd_fonts_to_download
-    curl -LO $nerd_font_base_url$font
-  end
-
-  cp /tmp/NerdFonts/*.ttf $HOME/.local/share/fonts/NerdFonts
-
-  if test -d /tmp/NerdFonts
-    rm -rf /tmp/NerdFonts
+  if test -z (groups | grep docker)
+    echo "Add" $USER "to group docker"
+    sudo usermod -aG docker $USER
   end
 end
 
 
-if read_confirm "Install/Upgrade Rust"
-  if type -q rustup
-    rustup self update
-    rustup update stable
-  else
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path
+function setup_unity
+  # TODO: maybe we can install unity-hub-beta package???
+  # or download the app image
+  install_package cpio
+  install_package visual-studio-code-bin
+  install_package dotnet-runtime
+  install_package dotnet-sdk
+  install_package mono-msbuild
+  install_package mono
+end
+
+
+function setup_flutter
+  install_package flutter
+  if test -z (groups | grep flutterusers)
+    sudo gpasswd -a $USER flutterusers
+  end
+
+  install_package android-studio
+  install_package google-chrome
+end
+
+function setup_keyboard_modifiers
+  set -l modifiers (grep -E "ctrl:nocaps,compose:ralt" /etc/X11/xorg.conf.d/00-keyboard.conf | string trim)
+  if test -z $modifiers
+    echo "Setup modifiers in xorg.conf.d"
+    localectl set-x11-keymap us "" "" ctrl:nocaps,compose:ralt
+  end
+
+  set -l modifiers (grep -E "ctrl:nocaps,compose:ralt" /etc/default/keyboard | string trim)
+  if test -z $modifiers
+    echo "Setup modifiers in /etc/default/keyboard"
+    sudo sed -i 's/XKBOPTIONS=".*"/XKBOPTIONS="ctrl:nocaps,compose:ralt"/g' /etc/default/keyboard
   end
 end
 
+setup_keyboard_modifiers
 
-if read_confirm "Install Brave Browser"
-  sudo apt install apt-transport-https curl
+install_package optimus-manager
+install_package optimus-manager-qt
 
-  sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+install_package steam
+install_package spotify
 
-  echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+install_package nerd-fonts-fira-code
+install_package starship
+install_package xclip
 
-  sudo apt update
+# bluetooth
+install_package bluez
+install_package bluez-utils
+install_package blueberry
 
-  sudo apt install brave-browser
-end
+# utilities
+install_package ripgrep
+install_package fd
+install_package optipng
+install_package pngquant
+install_package dua-cli
+install_package bottom
+install_package exa
+install_package foliate
 
-function install_from_github --description 'Install from github' --argument repository download_pattern
-  set --local temporary_download_dir /tmp/gru/(string replace / - $repository)
+# cloud
+install_package google-cloud-sdk
+install_package kubectl
+install_package sops
+install_package aws-cli
 
-  echo "Installing from" $repository "release" (gh release -R $repository view --json name --jq '.name')
+# development
+setup_docker
+install_package python-poetry
+install_package python-tox
+install_package pyenv
+install_package postgresql-libs
+install_package go
 
-  mkdir -p $temporary_download_dir
+setup_git
+setup_neovim
+setup_fish
+setup_kitty
+setup_fnm
+setup_unity
+setup_flutter
 
-  gh release -R $repository download \
-    -p $download_pattern \
-    -D $temporary_download_dir
-
-  sudo apt install $temporary_download_dir/*.deb
-
-  rm -rd $temporary_download_dir
-end
-
-if read_confirm "Install/Upgrade fd"
-  install_from_github sharkdp/fd 'fd-musl*_amd64.deb'
-end
-
-if read_confirm "Install/Upgrade SOPS"
-  install_from_github mozilla/sops 'sops_*_amd64.deb'
-end
+# XFCE
+# Setup whisker menu
+# Setup appearance
+#   - Change icons
+#   - Set Fonts
+# Setup Window Manager
+#   - Change Fonts
+#   - Remove shade icon from bar
+#   - Shortcut
+# Setup Window Manager Tweaks
+#   - Focus beahvior switch
