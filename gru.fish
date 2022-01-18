@@ -33,7 +33,7 @@ function setup_neovim
   backup_and_link $SCRIPT_DIR/nvim $HOME/.config/nvim
 
   if read_confirm "Install/Upgrade Neovim Plugins"
-    nvim --noplugin +PackerSync +qa
+    nvim --noplugin -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
   end
 end
 
@@ -131,6 +131,7 @@ setup_optimus
 
 install_package steam
 install_package spotify
+install_package discord
 
 install_package nerd-fonts-fira-code
 install_package starship
