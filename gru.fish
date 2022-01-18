@@ -127,6 +127,7 @@ function setup_optimus
 end
 
 setup_keyboard_modifiers
+setup_optimus
 
 install_package steam
 install_package spotify
