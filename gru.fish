@@ -155,6 +155,7 @@ install_package google-cloud-sdk
 install_package kubectl
 install_package sops
 install_package aws-cli
+install_package helm
 
 # development
 setup_docker
