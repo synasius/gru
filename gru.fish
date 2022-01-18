@@ -6,18 +6,6 @@ set SCRIPT_DIR (realpath (dirname (status -f)))
 source $SCRIPT_DIR/modules/common.fish
 
 
-function install_package -a package
-  if test -z (yay -Q $package)
-    echo "Install" $package
-    yay -S $package
-    return 0
-  else
-    echo $package "already installed"
-    return 1
-  end
-end
-
-
 function setup_git
   if install_package git-lfs
     echo "Setup git-lfs"
@@ -110,23 +98,35 @@ function setup_flutter
 end
 
 function setup_keyboard_modifiers
-  set -l modifiers (grep -E "ctrl:nocaps,compose:ralt" /etc/X11/xorg.conf.d/00-keyboard.conf | string trim)
-  if test -z $modifiers
+  set -l modifiers "ctrl:nocaps,compose:ralt"
+
+  set -l modifiers_found (grep -E $modifiers /etc/X11/xorg.conf.d/00-keyboard.conf | string trim)
+  if test -z $modifiers_found
     echo "Setup modifiers in xorg.conf.d"
     localectl set-x11-keymap us "" "" ctrl:nocaps,compose:ralt
   end
 
-  set -l modifiers (grep -E "ctrl:nocaps,compose:ralt" /etc/default/keyboard | string trim)
-  if test -z $modifiers
+  set -l modifiers_found (grep -E $modifiers /etc/default/keyboard | string trim)
+  if test -z $modifiers_found
     echo "Setup modifiers in /etc/default/keyboard"
     sudo sed -i 's/XKBOPTIONS=".*"/XKBOPTIONS="ctrl:nocaps,compose:ralt"/g' /etc/default/keyboard
   end
 end
 
-setup_keyboard_modifiers
+function setup_optimus
+  install_package optimus-manager
+  install_package optimus-manager-qt
 
-install_package optimus-manager
-install_package optimus-manager-qt
+  set -l optimus_conf /etc/optimus-manager/optimus-manager.conf
+  if test ! -e $optimus_conf
+    sudo cp /usr/share/optimus-manager.conf $optimus_conf
+
+    sudo sed -i 's/dynamic_power_management=.*/dynamic_power_management=fine/g' $optimus_conf
+    sudo sed -i 's/startup_mode=.*/startup_mode=hybrid/g' $optimus_conf
+  end
+end
+
+setup_keyboard_modifiers
 
 install_package steam
 install_package spotify

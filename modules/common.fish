@@ -29,3 +29,15 @@ function backup_and_link -d 'Link file or directory and create backup when direc
     echo "Link at $dest already exists"
   end
 end
+
+
+function install_package -a package
+  if test -z (yay -Q $package)
+    echo "Install" $package
+    yay -S $package
+    return 0
+  else
+    echo $package "already installed"
+    return 1
+  end
+end
