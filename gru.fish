@@ -29,6 +29,7 @@ end
 
 function setup_neovim
   install_package neovim
+  install_package stylua-bin
 
   backup_and_link $SCRIPT_DIR/nvim $HOME/.config/nvim
 
@@ -56,11 +57,10 @@ end
 
 
 function setup_fnm
-  if read_confirm "Install/Upgrade FNM"
-    curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
+  install_package fnm-bin
 
-    $HOME/.fnm/fnm completions --shell fish > $HOME/.config/fish/completions/fnm.fish
-  end
+  # Completions need to be generate because PKGBUILD doesn't
+  fnm completions --shell fish > $HOME/.config/fish/completions/fnm.fish
 end
 
 

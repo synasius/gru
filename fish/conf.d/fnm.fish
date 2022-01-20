@@ -1,5 +1,3 @@
-fish_add_path $HOME/.fnm
-
 if type -q fnm
-  fnm env | source
+  fnm env --use-on-cd | source
 end
