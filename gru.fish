@@ -186,3 +186,8 @@ setup_flutter
 #   - Shortcut
 # Setup Window Manager Tweaks
 #   - Focus beahvior switch
+
+# Flutter
+# Run `flutter doctor`
+# Install Android SDK and SDK Commandline Tools
+# Accept licenses `flutter doctor --android-licenses`
