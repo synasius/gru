@@ -75,7 +75,7 @@ table.insert(components.active[1], {
 	provider = icon_styles.right,
 	hl = {
 		fg = colors.fg_gutter,
-		bg = colors.bg_highlight,
+		bg = colors.bg,
 	},
 })
 
@@ -140,7 +140,10 @@ table.insert(components.active[1], {
 	enabled = function()
 		return lsp.diagnostics_exist("Error")
 	end,
-	hl = { fg = colors.red },
+	hl = {
+		fg = colors.red,
+		bg = colors.bg_dark,
+	},
 	icon = "  ",
 })
 
@@ -149,7 +152,10 @@ table.insert(components.active[1], {
 	enabled = function()
 		return lsp.diagnostics_exist("Warn")
 	end,
-	hl = { fg = colors.yellow },
+	hl = {
+		fg = colors.yellow,
+		bg = colors.bg_dark,
+	},
 	icon = "  ",
 })
 
@@ -158,7 +164,7 @@ table.insert(components.active[1], {
 	enabled = function()
 		return lsp.diagnostics_exist("Hint")
 	end,
-	hl = { fg = colors.fg_dark },
+	hl = { fg = colors.fg_dark, bg = colors.bg_dark },
 	icon = "  ",
 })
 
@@ -167,7 +173,7 @@ table.insert(components.active[1], {
 	enabled = function()
 		return lsp.diagnostics_exist("Info")
 	end,
-	hl = { fg = colors.green },
+	hl = { fg = colors.green, bg = colors.bg_dark },
 	icon = "  ",
 })
 
@@ -201,7 +207,7 @@ table.insert(components.active[2], {
 		end
 		return ""
 	end,
-	hl = { fg = colors.green },
+	hl = { fg = colors.green, bg = colors.bg_dark },
 })
 
 table.insert(components.active[3], {
