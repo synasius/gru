@@ -126,6 +126,11 @@ function setup_optimus
   end
 end
 
+
+function setup_style
+  install_package tela-icon-theme
+end
+
 setup_keyboard_modifiers
 setup_optimus
 
@@ -174,6 +179,7 @@ setup_kitty
 setup_fnm
 setup_unity
 setup_flutter
+setup_style
 
 # XFCE
 # Setup whisker menu
