@@ -172,6 +172,10 @@ install_package pyenv
 install_package postgresql-libs
 install_package go
 
+# graphics
+install_package gimp
+install_package inkscape
+
 setup_git
 setup_neovim
 setup_fish
