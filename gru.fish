@@ -95,6 +95,10 @@ function setup_flutter
 
   install_package android-studio
   install_package google-chrome
+  # For desktop support
+  install_package clang
+  install_package cmake
+  install_package ninja
 end
 
 function setup_keyboard_modifiers
@@ -175,6 +179,10 @@ install_package go
 # graphics
 install_package gimp
 install_package inkscape
+
+# Mega client
+install_package megasync-bin
+install_package thunar-megasync-bin
 
 setup_git
 setup_neovim
