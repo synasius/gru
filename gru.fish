@@ -189,7 +189,11 @@ setup_neovim
 setup_fish
 setup_kitty
 setup_fnm
+
+# game dev
 setup_unity
+install_package godot
+
 setup_flutter
 setup_style
 
