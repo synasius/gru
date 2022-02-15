@@ -76,8 +76,7 @@ end
 
 
 function setup_unity
-  # TODO: maybe we can install unity-hub-beta package???
-  # or download the app image
+  install_package unityhub
   install_package cpio
   install_package visual-studio-code-bin
   install_package dotnet-runtime
