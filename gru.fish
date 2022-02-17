@@ -87,10 +87,11 @@ end
 
 
 function setup_flutter
-  install_package flutter
-  if test -z (groups | grep flutterusers)
-    sudo gpasswd -a $USER flutterusers
-  end
+  # TODO: switch to fvm.app
+  #install_package flutter
+  #if test -z (groups | grep flutterusers)
+  #  sudo gpasswd -a $USER flutterusers
+  #end
 
   install_package android-studio
   install_package google-chrome
@@ -134,6 +135,19 @@ function setup_style
   install_package tela-icon-theme
 end
 
+
+function setup_pipewire
+  backup_and_link $SCRIPT_DIR/pipewire $HOME/.config/pipewire
+end
+
+
+function setup_starship
+  install_package starship
+  backup_and_link $SCRIPT_DIR/starship.toml $HOME/.config/starship.toml
+end
+
+
+setup_pipewire
 setup_keyboard_modifiers
 setup_optimus
 
@@ -141,8 +155,8 @@ install_package steam
 install_package spotify
 install_package discord
 
+setup_starship
 install_package nerd-fonts-fira-code
-install_package starship
 install_package xclip
 
 # bluetooth
@@ -178,6 +192,7 @@ install_package go
 # graphics
 install_package gimp
 install_package inkscape
+install_package krita
 
 # Mega client
 install_package megasync-bin
