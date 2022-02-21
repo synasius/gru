@@ -77,7 +77,17 @@ end
 
 function setup_unity
   install_package unityhub
+
+  # To support progressive lightmapper GPU
+  install_package clinfo
+  install_package ocl-icd
+  install_package opencl-headers
+  install_package opencl-nvidia
+
+  # To support install of Android SDK
   install_package cpio
+
+  # Other tools for scripting
   install_package visual-studio-code-bin
   install_package dotnet-runtime
   install_package dotnet-sdk
