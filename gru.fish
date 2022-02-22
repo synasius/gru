@@ -104,7 +104,10 @@ function setup_flutter
   #end
 
   install_package android-studio
-  install_package chromium
+
+  # For web build
+  install_package google-chrome
+
   # For desktop support
   install_package clang
   install_package cmake
@@ -198,6 +201,10 @@ install_package python-tox
 install_package pyenv
 install_package postgresql-libs
 install_package go
+
+# For integration testing
+install_package google-chrome
+install_package chromedriver
 
 # graphics
 install_package gimp
