@@ -104,7 +104,7 @@ function setup_flutter
   #end
 
   install_package android-studio
-  install_package google-chrome
+  install_package chromium
   # For desktop support
   install_package clang
   install_package cmake
