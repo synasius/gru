@@ -210,6 +210,7 @@ install_package chromedriver
 install_package gimp
 install_package inkscape
 install_package krita
+install_package simple-scan
 
 # Mega client
 install_package megasync-bin
