@@ -211,6 +211,8 @@ install_package gimp
 install_package inkscape
 install_package krita
 install_package simple-scan
+install_package simplescreenrecorder
+install_package evince
 
 # Mega client
 install_package megasync-bin
