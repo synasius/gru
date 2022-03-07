@@ -24,3 +24,5 @@
 [diff]
     algorithm = patience
     tool = vimdiff
+[init]
+    defaultBranch = main
