@@ -201,6 +201,7 @@ install_package python-tox
 install_package pyenv
 install_package postgresql-libs
 install_package go
+install_package xorg-xserver-xvfb
 
 # For integration testing
 install_package google-chrome
