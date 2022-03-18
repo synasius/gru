@@ -164,7 +164,11 @@ setup_pipewire
 setup_keyboard_modifiers
 setup_optimus
 
+# entertainment
 install_package steam
+install_package itch
+install_package wine
+
 install_package spotify
 install_package discord
 
