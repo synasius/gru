@@ -135,6 +135,7 @@ require("flutter-tools").setup({
 	debugger = {
 		enabled = true,
 	},
+  fvm = true,
 	lsp = {
 		on_attach = on_attach,
 	},
