@@ -216,7 +216,6 @@ install_package gimp
 install_package inkscape
 install_package krita
 install_package simple-scan
-install_package simplescreenrecorder
 install_package evince
 install_package xf86-input-wacom
 install_package libwacom
