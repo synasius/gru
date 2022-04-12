@@ -29,7 +29,7 @@ end
 
 function setup_neovim
   install_package neovim
-  install_package stylua-bin
+  install_package stylua
 
   backup_and_link $SCRIPT_DIR/nvim $HOME/.config/nvim
 
