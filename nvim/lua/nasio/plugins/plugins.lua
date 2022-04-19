@@ -17,7 +17,7 @@ require("packer").startup(function()
 	})
 
 	use({
-		"akinsho/nvim-bufferline.lua",
+		"akinsho/bufferline.nvim",
 		requires = "kyazdani42/nvim-web-devicons",
 		config = function()
 			require("nasio.plugins.configs.bufferline")
