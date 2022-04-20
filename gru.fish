@@ -223,6 +223,7 @@ install_package libwacom
 
 # Mega client
 install_package megasync-bin
+install_package nautilus-megasync
 
 setup_git
 setup_neovim
@@ -236,18 +237,6 @@ install_package godot
 
 setup_flutter
 setup_style
-
-# XFCE
-# Setup whisker menu
-# Setup appearance
-#   - Change icons
-#   - Set Fonts
-# Setup Window Manager
-#   - Change Fonts
-#   - Remove shade icon from bar
-#   - Shortcut
-# Setup Window Manager Tweaks
-#   - Focus beahvior switch
 
 # Flutter
 # Run `flutter doctor`
