@@ -190,6 +190,7 @@ install_package dua-cli
 install_package bottom
 install_package exa
 install_package foliate
+install_package shotwell
 
 # cloud
 install_package google-cloud-sdk
@@ -222,7 +223,6 @@ install_package libwacom
 
 # Mega client
 install_package megasync-bin
-install_package thunar-megasync-bin
 
 setup_git
 setup_neovim
