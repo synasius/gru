@@ -7,13 +7,12 @@ vim.g.nvim_tree_show_icons = {
 }
 
 require("nvim-tree").setup({
-	auto_close = false,
 	git = {
-		ignore = 2,
+		ignore = true,
 	},
 	filters = {
 		custom = { ".git", "node_modules", ".cache", "*.meta" },
-		dotfiles = 1,
+		dotfiles = true,
 	},
 	renderer = {
 		indent_markers = {

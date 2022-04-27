@@ -1,5 +1,3 @@
-local colors = require("tokyonight.colors").setup({})
-
 -- define custom diagnostics
 vim.fn.sign_define("DiagnosticSignWarn", { text = "", numhl = "DiagnosticSignWarn", texthl = "DiagnosticSignWarn" })
 vim.fn.sign_define(
@@ -25,11 +23,11 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
 	border = "single",
 })
 
-
 local on_attach = function(client, bufnr)
 	local function buf_set_keymap(...)
 		vim.api.nvim_buf_set_keymap(bufnr, ...)
 	end
+
 	local function buf_set_option(...)
 		vim.api.nvim_buf_set_option(bufnr, ...)
 	end
@@ -38,7 +36,7 @@ local on_attach = function(client, bufnr)
 
 	-- Mappings.
 	local opts = { noremap = true, silent = true }
-	buf_set_keymap("n", "ga", "<cmd>lua require[[telescope.builtin]].lsp_code_actions{}<CR>", opts)
+	buf_set_keymap("n", "ga", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
 	buf_set_keymap("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
 	buf_set_keymap("n", "gd", "<cmd>lua require[[telescope.builtin]].lsp_definitions{}<CR>", opts)
 	buf_set_keymap("n", "gr", "<cmd>lua require[[telescope.builtin]].lsp_references{}<CR>", opts)
@@ -67,7 +65,6 @@ local on_attach = function(client, bufnr)
 	end
 end
 
-
 -- config that activates keymaps and enables snippet support
 local function make_config()
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -82,7 +79,6 @@ local function make_config()
 	}
 end
 
-
 local black = require("nasio.plugins.configs.efm.black")
 local flake8 = require("nasio.plugins.configs.efm.flake8")
 local pylint = require("nasio.plugins.configs.efm.pylint")
@@ -94,48 +90,63 @@ local prettier = require("nasio.plugins.configs.efm.prettier")
 local lsp_installer = require("nvim-lsp-installer")
 
 lsp_installer.on_server_ready(function(server)
-    local opts = make_config()
+	local opts = make_config()
 
-    if server.name == "pylsp" then
-      opts.settings = {
-        pylsp = {
-          plugins = {
-            pyflakes = { enabled = true },
-            pycodestyle = { enabled = false },
-            yapf = { enabled = false }
-          }
-        }
-      }
-    end
+	if server.name == "pylsp" then
+		opts.settings = {
+			pylsp = {
+				plugins = {
+					pyflakes = { enabled = true },
+					pycodestyle = { enabled = false },
+					yapf = { enabled = false },
+				},
+			},
+		}
+	end
 
-    if server.name == "efm" then
-      opts.init_options = { documentFormatting = true }
-      opts.root_dir = vim.loop.cwd
-      opts.filetypes = { "python", "lua", "javascript", "typescript", "html" }
-      opts.settings = {
-        rootMarkers = { ".git/", "pyproject.toml" },
-        languages = {
-          python = { black, flake8, isort, mypy, pylint },
-          lua = { stylua },
-          javascript = { prettier },
-          typescript = { prettier },
-          html = { prettier },
-        },
-      }
-    end
+	if server.name == "efm" then
+		opts.init_options = { documentFormatting = true }
+		opts.root_dir = vim.loop.cwd
+		opts.filetypes = { "python", "lua", "javascript", "typescript", "html" }
+		opts.settings = {
+			rootMarkers = { ".git/", "pyproject.toml" },
+			languages = {
+				python = { black, flake8, isort, mypy, pylint },
+				lua = { stylua },
+				javascript = { prettier },
+				typescript = { prettier },
+				html = { prettier },
+			},
+		}
+	end
 
-    -- This setup() function is exactly the same as lspconfig's setup function (:help lspconfig-quickstart)
-    server:setup(opts)
-    vim.cmd([[ do User LspAttachBuffers ]])
+	if server.name == "sumneko_lua" then
+		opts.settings = {
+			Lua = {
+				diagnostics = { globals = { "vim", "use" } },
+				format = { enable = false },
+			},
+		}
+		opts.on_attach = function(client, bufnr)
+			-- Disable sumneko_lua builtin formatter because I prefer stylua
+			client.resolved_capabilities.document_formatting = false
+			client.resolved_capabilities.document_range_formatting = false
+
+			on_attach(client, bufnr)
+		end
+	end
+
+	-- This setup() function is exactly the same as lspconfig's setup function (:help lspconfig-quickstart)
+	server:setup(opts)
+	vim.cmd([[ do User LspAttachBuffers ]])
 end)
-
 
 -- Also setup fluttertools
 require("flutter-tools").setup({
 	debugger = {
 		enabled = true,
 	},
-  fvm = true,
+	fvm = true,
 	lsp = {
 		on_attach = on_attach,
 	},

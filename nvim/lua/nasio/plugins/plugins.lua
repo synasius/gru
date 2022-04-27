@@ -137,6 +137,7 @@ require("packer").startup(function()
 		end,
 	})
 
+	use({ "nvim-telescope/telescope-ui-select.nvim" })
 	use({
 		"nvim-telescope/telescope.nvim",
 		requires = { "nvim-lua/plenary.nvim" },
@@ -194,7 +195,6 @@ require("packer").startup(function()
 		end,
 	})
 end)
-
 
 -- Auto compile when there are changes in plugins.lua
 vim.cmd([[
