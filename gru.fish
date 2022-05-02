@@ -220,6 +220,7 @@ install_package simple-scan
 install_package evince
 install_package xf86-input-wacom
 install_package libwacom
+install_package pureref
 
 # Mega client
 install_package megasync-bin
