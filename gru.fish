@@ -169,7 +169,7 @@ install_package steam
 install_package itch
 install_package wine
 
-install_package spotify
+flatpak install spotify
 install_package discord
 
 setup_starship
