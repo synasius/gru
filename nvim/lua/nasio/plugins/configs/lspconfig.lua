@@ -65,19 +65,10 @@ local on_attach = function(client, bufnr)
 	end
 end
 
--- config that activates keymaps and enables snippet support
-local function make_config()
-	local capabilities = vim.lsp.protocol.make_client_capabilities()
-	capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
-	capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-	return {
-		-- enable snippet support
-		capabilities = capabilities,
-		-- map buffer local keybindings when the language server attaches
-		on_attach = on_attach,
-	}
-end
+-- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 local black = require("nasio.plugins.configs.efm.black")
 local flake8 = require("nasio.plugins.configs.efm.flake8")
@@ -87,59 +78,55 @@ local mypy = require("nasio.plugins.configs.efm.mypy")
 local stylua = require("nasio.plugins.configs.efm.stylua")
 local prettier = require("nasio.plugins.configs.efm.prettier")
 
-local lsp_installer = require("nvim-lsp-installer")
+require("nvim-lsp-installer").setup()
+local lspconfig = require("lspconfig")
 
-lsp_installer.on_server_ready(function(server)
-	local opts = make_config()
-
-	if server.name == "pylsp" then
-		opts.settings = {
-			pylsp = {
-				plugins = {
-					pyflakes = { enabled = true },
-					pycodestyle = { enabled = false },
-					yapf = { enabled = false },
-				},
+lspconfig.pylsp.setup({
+	capabilities = capabilities,
+	on_attach = on_attach,
+	settings = {
+		pylsp = {
+			plugins = {
+				pyflakes = { enabled = true },
+				pycodestyle = { enabled = false },
+				yapf = { enabled = false },
 			},
-		}
-	end
+		},
+	},
+})
 
-	if server.name == "efm" then
-		opts.init_options = { documentFormatting = true }
-		opts.root_dir = vim.loop.cwd
-		opts.filetypes = { "python", "lua", "javascript", "typescript", "html" }
-		opts.settings = {
-			rootMarkers = { ".git/", "pyproject.toml" },
-			languages = {
-				python = { black, flake8, isort, mypy, pylint },
-				lua = { stylua },
-				javascript = { prettier },
-				typescript = { prettier },
-				html = { prettier },
-			},
-		}
-	end
+lspconfig.efm.setup({
+	capabilities = capabilities,
+	on_attach = on_attach,
+	init_options = { documentFormatting = true },
+	root_dir = vim.loop.cwd,
+	filetypes = { "python", "lua", "javascript", "typescript", "html" },
+	settings = {
+		rootMarkers = { ".git/", "pyproject.toml" },
+		languages = {
+			python = { black, flake8, isort, mypy, pylint },
+			lua = { stylua },
+			javascript = { prettier },
+			typescript = { prettier },
+			html = { prettier },
+		},
+	},
+})
 
-	if server.name == "sumneko_lua" then
-		opts.settings = {
-			Lua = {
-				diagnostics = { globals = { "vim", "use" } },
-				format = { enable = false },
-			},
-		}
-		opts.on_attach = function(client, bufnr)
-			-- Disable sumneko_lua builtin formatter because I prefer stylua
-			client.resolved_capabilities.document_formatting = false
-			client.resolved_capabilities.document_range_formatting = false
-
-			on_attach(client, bufnr)
-		end
-	end
-
-	-- This setup() function is exactly the same as lspconfig's setup function (:help lspconfig-quickstart)
-	server:setup(opts)
-	vim.cmd([[ do User LspAttachBuffers ]])
-end)
+lspconfig.sumneko_lua.setup({
+	settings = {
+		Lua = {
+			diagnostics = { globals = { "vim" } },
+			format = { enable = false },
+		},
+	},
+	on_attach = function(client, bufnr)
+		-- Disable sumneko_lua builtin formatter because I prefer stylua
+		client.resolved_capabilities.document_formatting = false
+		client.resolved_capabilities.document_range_formatting = false
+		on_attach(client, bufnr)
+	end,
+})
 
 -- Also setup fluttertools
 require("flutter-tools").setup({

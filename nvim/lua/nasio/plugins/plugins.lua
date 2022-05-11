@@ -1,4 +1,4 @@
-require("packer").startup(function()
+require("packer").startup(function(use)
 	use({
 		"wbthomason/packer.nvim",
 	})
@@ -161,17 +161,12 @@ require("packer").startup(function()
 	})
 
 	use({
-		"glepnir/dashboard-nvim",
+		"goolord/alpha-nvim",
+		requires = { "kyazdani42/nvim-web-devicons" },
 		config = function()
 			require("nasio.plugins.configs.dashboard")
 		end,
-		setup = function()
-			require("nasio.plugins.mappings.dashboard")
-		end,
 	})
-
-	-- Debugging
-	-- use("mfussenegger/nvim-dap")
 
 	-- Trim traling spaces and whitelines at the end of files
 	use({
