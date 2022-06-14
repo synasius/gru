@@ -2,9 +2,7 @@
 
 set SCRIPT_DIR (realpath (dirname (status -f)))
 
-
 source $SCRIPT_DIR/modules/common.fish
-
 
 function setup_git
   if install_package git-lfs
@@ -26,7 +24,6 @@ function setup_git
   end
 end
 
-
 function setup_neovim
   install_package neovim
   install_package stylua
@@ -38,13 +35,11 @@ function setup_neovim
   end
 end
 
-
 function setup_kitty
   install_package kitty
 
   backup_and_link $SCRIPT_DIR/kitty $HOME/.config/kitty
 end
-
 
 function setup_fish
   set -l fish_shell_passwd (grep -E $USER".*fish" /etc/passwd | string trim)
@@ -55,14 +50,12 @@ function setup_fish
   backup_and_link $SCRIPT_DIR/fish $HOME/.config/fish
 end
 
-
 function setup_fnm
   install_package fnm-bin
 
   # Completions need to be generate because PKGBUILD doesn't
   fnm completions --shell fish > $HOME/.config/fish/completions/fnm.fish
 end
-
 
 function setup_docker
   install_package docker
@@ -73,7 +66,6 @@ function setup_docker
     sudo usermod -aG docker $USER
   end
 end
-
 
 function setup_unity
   install_package unityhub
@@ -95,13 +87,8 @@ function setup_unity
   install_package mono
 end
 
-
 function setup_flutter
-  # TODO: switch to fvm.app
-  #install_package flutter
-  #if test -z (groups | grep flutterusers)
-  #  sudo gpasswd -a $USER flutterusers
-  #end
+  install_package fvm-bin
 
   install_package android-studio
 
@@ -143,22 +130,18 @@ function setup_optimus
   end
 end
 
-
 function setup_style
   install_package tela-icon-theme
 end
-
 
 function setup_pipewire
   backup_and_link $SCRIPT_DIR/pipewire $HOME/.config/pipewire
 end
 
-
 function setup_starship
   install_package starship
   backup_and_link $SCRIPT_DIR/starship.toml $HOME/.config/starship.toml
 end
-
 
 setup_pipewire
 setup_keyboard_modifiers
@@ -170,6 +153,7 @@ install_package itch
 install_package wine
 
 flatpak install spotify
+flatpak install paper
 install_package discord
 
 setup_starship
@@ -214,7 +198,7 @@ install_package chromedriver
 
 # graphics
 install_package gimp
-install_package inkscape
+flatpak install inkscape
 install_package krita
 install_package simple-scan
 install_package evince
