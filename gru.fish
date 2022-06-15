@@ -118,8 +118,8 @@ function setup_keyboard_modifiers
 end
 
 function setup_optimus
+  install_package gdm-prime
   install_package optimus-manager
-  install_package optimus-manager-qt
 
   set -l optimus_conf /etc/optimus-manager/optimus-manager.conf
   if test ! -e $optimus_conf
