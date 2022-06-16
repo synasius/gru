@@ -149,7 +149,6 @@ setup_optimus
 
 # entertainment
 install_package steam
-install_package itch
 install_package wine
 
 flatpak install spotify
