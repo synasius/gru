@@ -130,10 +130,6 @@ function setup_optimus
   end
 end
 
-function setup_style
-  install_package tela-icon-theme
-end
-
 function setup_pipewire
   backup_and_link $SCRIPT_DIR/pipewire $HOME/.config/pipewire
 end
@@ -150,9 +146,10 @@ setup_optimus
 # entertainment
 install_package steam
 install_package wine
+install_package itch-bin
 
-flatpak install spotify
-flatpak install paper
+flatpak install com.spotify.Client
+flatpak install io.posidon.Paper
 install_package discord
 
 setup_starship
@@ -197,7 +194,7 @@ install_package chromedriver
 
 # graphics
 install_package gimp
-flatpak install inkscape
+flatpak install org.inkscape.Inkscape
 install_package krita
 install_package simple-scan
 install_package evince
@@ -220,7 +217,6 @@ setup_unity
 install_package godot
 
 setup_flutter
-setup_style
 
 # Flutter
 # Run `flutter doctor`
