@@ -201,6 +201,8 @@ install_package evince
 install_package xf86-input-wacom
 install_package libwacom
 install_package pureref
+install_package perl-image-exiftool
+install_package jhead
 
 # Mega client
 install_package megasync-bin
