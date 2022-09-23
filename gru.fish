@@ -147,11 +147,17 @@ setup_optimus
 install_package steam
 install_package wine
 install_package itch-bin
+install_package lutris
 
 flatpak install com.spotify.Client
 flatpak install io.posidon.Paper
+flatpak install com.gitlab.newsflash
 install_package discord
 
+# Study
+flatpak install net.ankiweb.Anki
+
+# shell
 setup_starship
 install_package nerd-fonts-fira-code
 install_package xclip
@@ -192,9 +198,10 @@ install_package xorg-server-xvfb
 install_package google-chrome
 install_package chromedriver
 
-# graphics
+# graphics and media
 install_package gimp
 flatpak install org.inkscape.Inkscape
+flatpak install org.kde.digikam
 install_package krita
 install_package simple-scan
 install_package evince
@@ -203,6 +210,7 @@ install_package libwacom
 install_package pureref
 install_package perl-image-exiftool
 install_package jhead
+install_package obs-studio
 
 # Mega client
 install_package megasync-bin
@@ -217,6 +225,8 @@ setup_fnm
 # game dev
 setup_unity
 install_package godot
+install_package godot-mono-bin
+install_package godot4-bin
 
 setup_flutter
 
