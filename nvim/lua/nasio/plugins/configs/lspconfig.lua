@@ -58,16 +58,16 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap("n", "<space>q", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>", opts)
 
 	-- Set some keybinds conditional on server capabilities
-	if client.resolved_capabilities.document_formatting then
+	if client.server_capabilities.document_formatting then
 		buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-	elseif client.resolved_capabilities.document_range_formatting then
+	elseif client.server_capabilities.document_range_formatting then
 		buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
 	end
 end
 
 -- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 local black = require("nasio.plugins.configs.efm.black")
@@ -122,8 +122,8 @@ lspconfig.sumneko_lua.setup({
 	},
 	on_attach = function(client, bufnr)
 		-- Disable sumneko_lua builtin formatter because I prefer stylua
-		client.resolved_capabilities.document_formatting = false
-		client.resolved_capabilities.document_range_formatting = false
+		client.server_capabilities.document_formatting = false
+		client.server_capabilities.document_range_formatting = false
 		on_attach(client, bufnr)
 	end,
 })

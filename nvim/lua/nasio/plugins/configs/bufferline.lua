@@ -30,7 +30,7 @@ require("bufferline").setup({
 	-- for additional highlights see :help bufferline-highlights
 	highlights = {
     fill = {
-      guibg = colors.bg_dark
+      bg = colors.bg_dark
     }
   }
 })
