@@ -117,19 +117,6 @@ function setup_keyboard_modifiers
   end
 end
 
-function setup_optimus
-  install_package gdm-prime
-  install_package optimus-manager
-
-  set -l optimus_conf /etc/optimus-manager/optimus-manager.conf
-  if test ! -e $optimus_conf
-    sudo cp /usr/share/optimus-manager.conf $optimus_conf
-
-    sudo sed -i 's/dynamic_power_management=.*/dynamic_power_management=fine/g' $optimus_conf
-    sudo sed -i 's/startup_mode=.*/startup_mode=hybrid/g' $optimus_conf
-  end
-end
-
 function setup_pipewire
   backup_and_link $SCRIPT_DIR/pipewire $HOME/.config/pipewire
 end
@@ -141,7 +128,6 @@ end
 
 setup_pipewire
 setup_keyboard_modifiers
-setup_optimus
 
 # entertainment
 install_package steam
