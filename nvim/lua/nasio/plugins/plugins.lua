@@ -102,9 +102,10 @@ require("packer").startup(function(use)
 		end,
 	})
 
+  use { "williamboman/mason.nvim" }
+  use { "williamboman/mason-lspconfig.nvim" }
 	use({
 		"neovim/nvim-lspconfig",
-		requires = "williamboman/nvim-lsp-installer",
 		config = function()
 			require("nasio.plugins.configs.lspconfig")
 		end,

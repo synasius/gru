@@ -78,7 +78,9 @@ local mypy = require("nasio.plugins.configs.efm.mypy")
 local stylua = require("nasio.plugins.configs.efm.stylua")
 local prettier = require("nasio.plugins.configs.efm.prettier")
 
-require("nvim-lsp-installer").setup()
+require("mason").setup()
+require("mason-lspconfig").setup()
+
 local lspconfig = require("lspconfig")
 
 lspconfig.pylsp.setup({
