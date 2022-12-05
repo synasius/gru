@@ -136,9 +136,11 @@ install_package itch-bin
 install_package lutris
 
 flatpak install com.spotify.Client
-flatpak install io.posidon.Paper
+flatpak install md.obsidian.Obsidian
 flatpak install com.gitlab.newsflash
 install_package discord
+install_package foliate
+install_package shotwell
 
 # Study
 flatpak install net.ankiweb.Anki
@@ -161,11 +163,10 @@ install_package pngquant
 install_package dua-cli
 install_package bottom
 install_package exa
-install_package foliate
-install_package shotwell
 
 # cloud
 install_package google-cloud-sdk
+install_package google-cloud-sdk-gke-gcloud-auth-plugin
 install_package kubectl
 install_package sops
 install_package aws-cli
