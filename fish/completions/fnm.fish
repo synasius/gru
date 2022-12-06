@@ -32,6 +32,7 @@ complete -c fnm -n "__fish_seen_subcommand_from use" -l silent-if-unchanged -d '
 complete -c fnm -n "__fish_seen_subcommand_from env" -l shell -d 'The shell syntax to use. Infers when missing' -r -f -a "{bash	,zsh	,fish	,powershell	}"
 complete -c fnm -n "__fish_seen_subcommand_from env" -l help -d 'Print help information'
 complete -c fnm -n "__fish_seen_subcommand_from env" -l version -d 'Print version information'
+complete -c fnm -n "__fish_seen_subcommand_from env" -l json -d 'Print JSON instead of shell commands'
 complete -c fnm -n "__fish_seen_subcommand_from env" -l multi -d 'Deprecated. This is the default now'
 complete -c fnm -n "__fish_seen_subcommand_from env" -l use-on-cd -d 'Print the script to change Node versions every directory change'
 complete -c fnm -n "__fish_seen_subcommand_from completions" -l shell -d 'The shell syntax to use. Infers when missing' -r
