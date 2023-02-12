@@ -26,13 +26,8 @@ end
 
 function setup_neovim
   install_package neovim
-  install_package stylua
 
-  backup_and_link $SCRIPT_DIR/nvim $HOME/.config/nvim
-
-  if read_confirm "Install/Upgrade Neovim Plugins"
-    nvim --noplugin -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
-  end
+  backup_and_link $SCRIPT_DIR/nvim/custom $HOME/.config/nvim/lua/custom
 end
 
 function setup_kitty
@@ -124,6 +119,15 @@ end
 function setup_starship
   install_package starship
   backup_and_link $SCRIPT_DIR/starship.toml $HOME/.config/starship.toml
+end
+
+function setup_shell_themes
+  set -l themes_dir $HOME/.config/gruthemes
+  if test ! -d $themes_dir
+    git clone git@github.com:folke/tokyonight.nvim.git $themes_dir --depth 1 
+  else
+    git -C $themes_dir pull
+  end
 end
 
 setup_pipewire
