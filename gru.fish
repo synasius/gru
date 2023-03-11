@@ -182,7 +182,6 @@ install_package python-poetry
 install_package python-tox
 install_package pyenv
 install_package postgresql-libs
-install_package go
 install_package xorg-server-xvfb
 
 # For integration testing
