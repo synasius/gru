@@ -169,8 +169,8 @@ install_package bottom
 install_package exa
 
 # cloud
-install_package google-cloud-sdk
-install_package google-cloud-sdk-gke-gcloud-auth-plugin
+install_package google-cloud-cli
+install_package google-cloud-cli-gke-gcloud-auth-plugin
 install_package kubectl
 install_package sops
 install_package aws-cli
