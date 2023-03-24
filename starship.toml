@@ -21,9 +21,11 @@ symbol = " "
 
 [gcloud]
 symbol = " "
-format = 'on [$symbol$project(\($region\))]($style) '
+format = 'on [$symbol$project]($style) '
 [gcloud.region_aliases]
 europe-west1 = "eu1"
+[gcloud.project_aliases]
+siqtraq-208312 = 'enine'
 
 [git_branch]
 symbol = " "
