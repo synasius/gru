@@ -25,6 +25,7 @@ complete -c fnm -n "__fish_seen_subcommand_from list" -l version -d 'Print versi
 complete -c fnm -n "__fish_seen_subcommand_from install" -l help -d 'Print help information'
 complete -c fnm -n "__fish_seen_subcommand_from install" -l version -d 'Print version information'
 complete -c fnm -n "__fish_seen_subcommand_from install" -l lts -d 'Install latest LTS'
+complete -c fnm -n "__fish_seen_subcommand_from install" -l latest -d 'Install latest version'
 complete -c fnm -n "__fish_seen_subcommand_from use" -l help -d 'Print help information'
 complete -c fnm -n "__fish_seen_subcommand_from use" -l version -d 'Print version information'
 complete -c fnm -n "__fish_seen_subcommand_from use" -l install-if-missing -d 'Install the version if it isn\'t installed yet'
