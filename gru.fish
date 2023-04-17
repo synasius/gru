@@ -222,7 +222,6 @@ setup_fnm
 setup_unity
 install_package godot
 install_package godot-mono-bin
-install_package godot4-bin
 
 setup_flutter
 
