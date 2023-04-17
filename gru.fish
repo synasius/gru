@@ -27,7 +27,13 @@ end
 function setup_neovim
   install_package neovim
 
-  backup_and_link $SCRIPT_DIR/nvim/custom $HOME/.config/nvim/lua/custom
+  set -l nvim_dir "$HOME/.config/nvim"
+  set -l nvchad_repo "https://github.com/NvChad/NvChad"
+
+  if test ! -e $nvim_dir
+    git clone $nvchad_repo $nvim_dir --depth 1 && nvim
+    backup_and_link $SCRIPT_DIR/nvim/custom $nvim_dir/lua/custom
+  end 
 end
 
 function setup_kitty
