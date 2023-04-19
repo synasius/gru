@@ -157,7 +157,7 @@ flatpak install net.ankiweb.Anki
 
 # shell
 setup_starship
-#install_package nerd-fonts-fira-code
+install_package ttf-firacode-nerd
 install_package xclip
 
 # bluetooth
