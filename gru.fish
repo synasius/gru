@@ -22,6 +22,8 @@ function setup_git
     git config --global user.name $user_name
     git config --global user.email $user_email
   end
+
+  install_package github-cli
 end
 
 function setup_neovim
@@ -53,9 +55,6 @@ end
 
 function setup_fnm
   install_package fnm-bin
-
-  # Completions need to be generate because PKGBUILD doesn't
-  fnm completions --shell fish > $HOME/.config/fish/completions/fnm.fish
 end
 
 function setup_docker
@@ -156,9 +155,11 @@ install_package shotwell
 flatpak install net.ankiweb.Anki
 
 # shell
-setup_starship
-install_package ttf-firacode-nerd
+install_package ttf-nerd-fonts-symbols-common 
+install_package ttf-nerd-fonts-symbols-2048-em
 install_package xclip
+# TODO: setup MonoLisa font
+setup_starship
 
 # bluetooth
 install_package bluez
@@ -197,7 +198,6 @@ install_package chromedriver
 # graphics and media
 install_package gimp
 flatpak install org.inkscape.Inkscape
-flatpak install org.kde.digikam
 install_package krita
 install_package simple-scan
 install_package evince
