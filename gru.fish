@@ -67,6 +67,15 @@ function setup_docker
   end
 end
 
+function setup_rust
+  if install_package rustup
+    rustup default stable
+    rustup component add rust-analyzer rust-src
+  else
+    rustup update
+  end
+end
+
 function setup_unity
   install_package unityhub
 
@@ -189,9 +198,10 @@ install_package python-poetry
 install_package python-tox
 install_package pyenv
 install_package postgresql-libs
-install_package xorg-server-xvfb
+setup_rust
 
 # For integration testing
+install_package xorg-server-xvfb
 install_package google-chrome
 install_package chromedriver
 
