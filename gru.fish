@@ -233,6 +233,9 @@ setup_unity
 install_package godot
 install_package godot-mono-bin
 
+# PineTime
+flatpak install flathub io.gitlab.azymohliad.WatchMate
+
 setup_flutter
 
 # Flutter
