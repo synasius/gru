@@ -149,6 +149,9 @@ setup_keyboard_modifiers
 
 # entertainment
 install_package steam
+# libraries for steam games: Loop Hero
+# install_package libldap24
+
 install_package wine
 install_package itch-bin
 install_package lutris
@@ -156,6 +159,7 @@ install_package lutris
 flatpak install com.spotify.Client
 flatpak install md.obsidian.Obsidian
 flatpak install com.gitlab.newsflash
+flatpak install com.calibre_ebook.calibre
 install_package discord
 install_package foliate
 install_package shotwell
@@ -178,8 +182,6 @@ install_package blueberry
 # utilities
 install_package ripgrep
 install_package fd
-install_package optipng
-install_package pngquant
 install_package dua-cli
 install_package bottom
 install_package exa
@@ -191,6 +193,7 @@ install_package kubectl
 install_package sops
 install_package aws-cli
 install_package helm
+install_package cmctl
 
 # development
 setup_docker
@@ -207,6 +210,7 @@ install_package chromedriver
 
 # graphics and media
 install_package gimp
+flatpak install com.github.maoschanz.drawing
 flatpak install org.inkscape.Inkscape
 install_package krita
 install_package simple-scan
@@ -216,7 +220,8 @@ install_package libwacom
 install_package pureref
 install_package perl-image-exiftool
 install_package jhead
-install_package obs-studio
+install_package optipng
+install_package pngquant
 
 # Mega client
 install_package megasync-bin
@@ -234,7 +239,10 @@ install_package godot
 install_package godot-mono-bin
 
 # PineTime
-flatpak install flathub io.gitlab.azymohliad.WatchMate
+flatpak install io.gitlab.azymohliad.WatchMate
+
+# Gnome Extensions
+install_package gnome-browser-connector
 
 setup_flutter
 
@@ -242,3 +250,8 @@ setup_flutter
 # Run `flutter doctor`
 # Install Android SDK and SDK Commandline Tools
 # Accept licenses `flutter doctor --android-licenses`
+echo "Other Thing To Do:"
+echo "- Sync Firefox account"
+echo "- Install AppIndicator extension for Gnome"
+echo "- Setup MonoLisa font"
+echo "- Setup gnome online accounts"
