@@ -244,12 +244,12 @@ flatpak install io.gitlab.azymohliad.WatchMate
 # Gnome Extensions
 install_package gnome-browser-connector
 
-setup_flutter
-
 # Flutter
+# setup_flutter
 # Run `flutter doctor`
 # Install Android SDK and SDK Commandline Tools
 # Accept licenses `flutter doctor --android-licenses`
+
 echo "Other Thing To Do:"
 echo "- Sync Firefox account"
 echo "- Install AppIndicator extension for Gnome"
