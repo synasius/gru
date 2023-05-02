@@ -4,7 +4,42 @@ set SCRIPT_DIR (realpath (dirname (status -f)))
 
 source $SCRIPT_DIR/modules/common.fish
 
+function read_confirm --description 'Ask the user for confirmation' --argument prompt default
+  if test -z "$prompt"
+    set prompt "Continue?"
+  end 
+  
+  set -l choice "[Y/n]"
+  switch $default
+    case N n
+      set choice "[y/N]"
+      set default_return 1
+    case '*'
+      set default "Y"
+      set default_return 0
+  end
+      
+  while true
+    read -p 'set_color green; echo -n "$prompt $choice: "; set_color normal' -l confirm
+
+    switch $confirm
+      case Y y 
+        return 0
+      case N n 
+        return 1
+      case ''
+        return $default_return
+    end 
+  end 
+end
+
 function setup_git
+  if ! read_confirm "Setup git?"
+    return
+  end
+
+  install_package git
+  
   if install_package git-lfs
     echo "Setup git-lfs"
     git lfs install
@@ -27,6 +62,10 @@ function setup_git
 end
 
 function setup_neovim
+  if ! read_confirm "Setup neovim?"
+    return
+  end
+    
   install_package neovim
 
   set -l nvim_dir "$HOME/.config/nvim"
@@ -39,12 +78,20 @@ function setup_neovim
 end
 
 function setup_kitty
+  if ! read_confirm "Setup kitty?"
+    return
+  end
+    
   install_package kitty
 
   backup_and_link $SCRIPT_DIR/kitty $HOME/.config/kitty
 end
 
 function setup_fish
+  if ! read_confirm "Setup fish?"
+    return
+  end
+    
   set -l fish_shell_passwd (grep -E $USER".*fish" /etc/passwd | string trim)
   if test -z $fish_shell_passwd
     chsh -s (which fish)
@@ -54,10 +101,18 @@ function setup_fish
 end
 
 function setup_fnm
+  if ! read_confirm "Setup Fast Node Manager?"
+    return
+  end
+    
   install_package fnm-bin
 end
 
 function setup_docker
+  if ! read_confirm "Setup docker?"
+    return
+  end
+    
   install_package docker
   install_package docker-compose
 
@@ -68,6 +123,10 @@ function setup_docker
 end
 
 function setup_rust
+  if ! read_confirm "Setup rust?"
+    return
+  end
+    
   if install_package rustup
     rustup default stable
     rustup component add rust-analyzer rust-src
@@ -77,6 +136,9 @@ function setup_rust
 end
 
 function setup_unity
+  if ! read_confirm "Setup Unity?"
+    return
+  end
   install_package unityhub
 
   # To support progressive lightmapper GPU
@@ -89,14 +151,27 @@ function setup_unity
   install_package cpio
 
   # Other tools for scripting
-  install_package visual-studio-code-bin
+  # install_package visual-studio-code-bin
   install_package dotnet-runtime
   install_package dotnet-sdk
   install_package mono-msbuild
   install_package mono
 end
 
+function setup_godot
+  if ! read_confirm "Setup Godot?"
+    return
+  end
+  
+  install_package godot
+  install_package godot-mono-bin
+end
+
 function setup_flutter
+  if ! read_confirm "Setup Flutter?" n
+    return
+  end
+  
   install_package fvm-bin
 
   install_package android-studio
@@ -110,7 +185,21 @@ function setup_flutter
   install_package ninja
 end
 
+function setup_bluetooth
+  if ! read_confirm "Setup bluetooth (needed for XFCE)?" n
+    return
+  end
+  
+  install_package bluez
+  install_package bluez-utils
+  install_package blueberry
+end
+
 function setup_keyboard_modifiers
+  if ! read_confirm "Setup Keyboard Modifiers (for XFCE, not necessary in Gnome)?" n
+    return
+  end
+  
   set -l modifiers "ctrl:nocaps,compose:ralt"
 
   set -l modifiers_found (grep -E $modifiers /etc/X11/xorg.conf.d/00-keyboard.conf | string trim)
@@ -127,15 +216,27 @@ function setup_keyboard_modifiers
 end
 
 function setup_pipewire
+  if ! read_confirm "Setup Pipewire?" n
+    return
+  end
+  
   backup_and_link $SCRIPT_DIR/pipewire $HOME/.config/pipewire
 end
 
 function setup_starship
+  if ! read_confirm "Setup Stasrship?"
+    return
+  end
+  
   install_package starship
   backup_and_link $SCRIPT_DIR/starship.toml $HOME/.config/starship.toml
 end
 
 function setup_shell_themes
+  if ! read_confirm "Setup Terminal Themes?"
+    return
+  end
+  
   set -l themes_dir $HOME/.config/gruthemes
   if test ! -d $themes_dir
     git clone git@github.com:folke/tokyonight.nvim.git $themes_dir --depth 1 
@@ -144,105 +245,182 @@ function setup_shell_themes
   end
 end
 
-setup_pipewire
-setup_keyboard_modifiers
+function setup_gaming
+  if ! read_confirm "Setup Gaming?"
+    return
+  end
+  # entertainment
+  install_package steam
+  # libraries for steam games: Loop Hero
+  # install_package libldap24
 
-# entertainment
-install_package steam
-# libraries for steam games: Loop Hero
-# install_package libldap24
+  # install_package wine
+  # install_package lutris
+  echo "TODO: setup itch.io"
+end
 
-install_package wine
-install_package itch-bin
-install_package lutris
+function setup_various
+  if ! read_confirm "Setup Various?"
+    return
+  end
+  flatpak install com.spotify.Client
+  flatpak install net.ankiweb.shell
+  flatpak install flathub com.discordapp.Discord
+  flatpak install io.gitlab.azymohliad.WatchMate
 
-flatpak install com.spotify.Client
-flatpak install md.obsidian.Obsidian
-flatpak install com.gitlab.newsflash
-flatpak install com.calibre_ebook.calibre
-install_package discord
-install_package foliate
-install_package shotwell
+  install_package newsflash
+  install_package obsidian
+  install_package foliate
+  install_package shotwell
+  install_package calibre
+end
 
-# Study
-flatpak install net.ankiweb.Anki
+function setup_fonts
+  if ! read_confirm "Setup fonts?"
+    return
+  end
+  
+  install_package ttf-nerd-fonts-symbols-common 
+  install_package ttf-nerd-fonts-symbols-2048-em
+  install_package xclip
 
-# shell
-install_package ttf-nerd-fonts-symbols-common 
-install_package ttf-nerd-fonts-symbols-2048-em
-install_package xclip
-# TODO: setup MonoLisa font
-setup_starship
+  set -l font_path $HOME/.local/share/fonts/MonoLisa
+  if test -e $font_path
+    return
+  end
 
-# bluetooth
-install_package bluez
-install_package bluez-utils
-install_package blueberry
+  echo "setup MonoLisa font"
+  while true
+    read -p 'set_color green; echo -n "Path to monolisa font: "; set_color normal' -l path
+
+    if test -e $path
+      mkdir -p $font_path
+      unzip -d $font_path $path
+      return
+    else
+      echo 'Invalid MonoLisa path'
+    end
+  end 
+end
 
 # utilities
-install_package ripgrep
-install_package fd
-install_package dua-cli
-install_package bottom
-install_package exa
+function setup_cli_utils
+  if ! read_confirm "Setup cli utilities?"
+    return
+  end
+  
+  install_package ripgrep
+  install_package fd
+  install_package dua-cli
+  install_package bottom
+  install_package exa
+end
 
 # cloud
-install_package google-cloud-cli
-install_package google-cloud-cli-gke-gcloud-auth-plugin
-install_package kubectl
-install_package sops
-install_package aws-cli
-install_package helm
-install_package cmctl
+function setup_cloud
+  if ! read_confirm "Setup cloud utilities?"
+    return
+  end
+  
+  install_package google-cloud-cli
+  install_package google-cloud-cli-gke-gcloud-auth-plugin
+  install_package kubectl
+  install_package sops
+  install_package aws-cli
+  install_package helm
+  install_package cmctl
+end
 
-# development
-setup_docker
-install_package python-poetry
-install_package python-tox
-install_package pyenv
-install_package postgresql-libs
-setup_rust
+function setup_python
+  if ! read_confirm "Setup python dev tools?"
+    return
+  end
+  
+  install_package python-poetry
+  install_package python-tox
+  install_package pyenv
+  install_package postgresql-libs
+end
 
 # For integration testing
-install_package xorg-server-xvfb
-install_package google-chrome
-install_package chromedriver
+function setup_integration_testing
+  if ! read_confirm "Setup integration testing tools?"
+    return
+  end
+  
+  install_package xorg-server-xvfb
+  install_package google-chrome
+  install_package chromedriver
+end
 
 # graphics and media
-install_package gimp
-flatpak install com.github.maoschanz.drawing
-flatpak install org.inkscape.Inkscape
-install_package krita
-install_package simple-scan
-install_package evince
-install_package xf86-input-wacom
-install_package libwacom
-install_package pureref
-install_package perl-image-exiftool
-install_package jhead
-install_package optipng
-install_package pngquant
+function setup_graphic
+  if ! read_confirm "Setup graphic tooling?"
+    return
+  end
+  
+  install_package blender
+  install_package gimp
+  install_package inkscape
+  install_package krita
+  install_package simple-scan
+  install_package evince
+  install_package xf86-input-wacom
+  install_package libwacom
+  install_package pureref
+  install_package perl-image-exiftool
+  install_package jhead
+  install_package optipng
+  install_package pngquant
+end
 
 # Mega client
-install_package megasync-bin
-install_package nautilus-megasync
+function setup_mega_sync
+  if ! read_confirm "Setup MEGASync?"
+    return
+  end
+  
+  install_package megasync-bin
+  install_package nautilus-megasync
+end
+
+# Gnome Extensions
+function setup_gnome
+  if ! read_confirm "Setup gnome?"
+    return
+  end
+
+  install_package gnome-browser-connector
+end
 
 setup_git
 setup_neovim
 setup_fish
 setup_kitty
+setup_shell_themes
 setup_fnm
 
 # game dev
 setup_unity
-install_package godot
-install_package godot-mono-bin
+setup_godot
+setup_gaming
 
-# PineTime
-flatpak install io.gitlab.azymohliad.WatchMate
+setup_pipewire
+setup_fonts
+setup_starship
+setup_cli_utils
+setup_cloud
 
-# Gnome Extensions
-install_package gnome-browser-connector
+# development
+setup_docker
+setup_python
+setup_rust
+setup_integration_testing
+
+setup_mega_sync
+setup_graphic
+setup_various
+setup_gnome
 
 # Flutter
 # setup_flutter
