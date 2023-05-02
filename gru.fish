@@ -344,7 +344,7 @@ end
 
 # For integration testing
 function setup_integration_testing
-  if ! read_confirm "Setup integration testing tools?"
+  if ! read_confirm "Setup integration testing tools?" n
     return
   end
   
@@ -391,6 +391,7 @@ function setup_gnome
   end
 
   install_package gnome-browser-connector
+  install_package gnome-calendar
 end
 
 setup_git
