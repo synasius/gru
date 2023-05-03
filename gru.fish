@@ -215,14 +215,6 @@ function setup_keyboard_modifiers
   end
 end
 
-function setup_pipewire
-  if ! read_confirm "Setup Pipewire?" n
-    return
-  end
-  
-  backup_and_link $SCRIPT_DIR/pipewire $HOME/.config/pipewire
-end
-
 function setup_starship
   if ! read_confirm "Setup Stasrship?"
     return
@@ -406,7 +398,6 @@ setup_unity
 setup_godot
 setup_gaming
 
-setup_pipewire
 setup_fonts
 setup_starship
 setup_cli_utils
