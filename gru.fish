@@ -248,7 +248,14 @@ function setup_gaming
 
   # install_package wine
   # install_package lutris
-  echo "TODO: setup itch.io"
+  if test ! -d "$HOME/.itch"
+    echo "Setup itch.io"
+    pushd "/tmp"
+    curl -JLO "https://itch.io/app/download?platform=linux"
+    chmod +x itch-setup && ./itch-setup
+    rm itch-setup
+    popd
+  end
 end
 
 function setup_various
