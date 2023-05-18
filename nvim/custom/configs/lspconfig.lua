@@ -12,9 +12,3 @@ for _, lsp in ipairs(servers) do
     capabilities = capabilities,
   }
 end
-
-lspconfig.omnisharp.setup {
-  cmd = { "omnisharp" },
-  on_attach = on_attach,
-  capabilities = capabilities,
-}

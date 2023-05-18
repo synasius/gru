@@ -391,6 +391,9 @@ function setup_gnome
 
   install_package gnome-browser-connector
   install_package gnome-calendar
+
+  backup_and_link $SCRIPT_DIR/slideshows/Wallpapers $HOME/Pictures/Wallpapers 
+  backup_and_link $SCRIPT_DIR/slideshows/gnome-background-properties $HOME/.local/share/gnome-background-properties
 end
 
 setup_git
