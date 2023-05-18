@@ -266,8 +266,8 @@ function setup_various
   flatpak install net.ankiweb.shell
   flatpak install flathub com.discordapp.Discord
   flatpak install io.gitlab.azymohliad.WatchMate
+  flatpak install com.gitlab.newsflash
 
-  install_package newsflash
   install_package obsidian
   install_package foliate
   install_package shotwell
