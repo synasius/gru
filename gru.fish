@@ -114,6 +114,7 @@ function setup_docker
   end
     
   install_package docker
+  install_package docker-buildx
   install_package docker-compose
 
   if test -z (groups | grep docker)
@@ -246,8 +247,11 @@ function setup_gaming
   # libraries for steam games: Loop Hero
   # install_package libldap24
 
-  # install_package wine
-  # install_package lutris
+  install_package wine
+  install_package lutris
+
+  install_package mangohud
+
   if test ! -d "$HOME/.itch"
     echo "Setup itch.io"
     pushd "/tmp"
@@ -311,6 +315,8 @@ function setup_cli_utils
   install_package ripgrep
   install_package fd
   install_package dua-cli
+  install_package dust
+  install_package bat
   install_package bottom
   install_package exa
 end
@@ -339,6 +345,7 @@ function setup_python
   install_package python-tox
   install_package pyenv
   install_package postgresql-libs
+  install_package ruff
 end
 
 # For integration testing

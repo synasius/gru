@@ -26,10 +26,6 @@
 [mergetool "vimdiff"]
     cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 
-[mergetool "unityyamlmerge"]
-    trustExitCode = false
-    cmd = '$HOME/Unity/Hub/Editor/2021.3.8f1/Editor/Data/Tools/UnityYAMLMerge' merge -p "$BASE" "$REMOTE" "$LOCAL" "$MERGED"
-
 [difftool]
     prompt = false
 
