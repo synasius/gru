@@ -165,7 +165,6 @@ function setup_godot
   end
   
   install_package godot
-  install_package godot-mono-bin
 end
 
 function setup_flutter
