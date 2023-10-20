@@ -29,6 +29,27 @@ local setup = function(_, opts)
 			})
 		end,
 
+		["pylsp"] = function()
+			lspconfig.pylsp.setup({
+				settings = {
+					pylsp = {
+						plugins = {
+							rope_autoimport = { enabled = true },
+							rope_completion = { enabled = true },
+
+							autopep8 = { enabled = false },
+							flake8 = { enabled = false },
+							pycodestyle = { enabled = false },
+							pydocstyle = { enabled = false },
+							pyflakes = { enabled = false },
+							pylint = { enabled = false },
+							yapf = { enabled = false },
+						},
+					},
+				},
+			})
+		end,
+
 		-- custom setup for a server goes after the function above
 		-- Example, override rust_analyzer
 		-- ["rust_analyzer"] = function ()
