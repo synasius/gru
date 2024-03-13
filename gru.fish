@@ -73,7 +73,7 @@ function setup_neovim
     set -l nvim_config_repo "git@github.com:synasius/nvim-lazyvim.git"
 
     if test ! -e $nvim_dir
-        git clone $nvchad_repo $nvim_dir && nvim
+        git clone $nvim_config_repo $nvim_dir && nvim
     end
 end
 
