@@ -134,6 +134,17 @@ function setup_rust
     else
         rustup update
     end
+
+    # an alternative linker
+    install_package lld
+
+    install_package cargo-watch
+    install_package cargo-tarpaulin
+    install_package cargo-audit
+    install_package cargo-expand
+    install_package cargo-udeps
+    install_package cargo-expand
+    install_package sqlx-cli
 end
 
 function setup_unity
@@ -239,6 +250,8 @@ function setup_gaming
     install_package mangohud
     install_package gamemode
 
+    install_package vulkan-tools
+
     if test ! -d "$HOME/.itch"
         echo "Setup itch.io"
         pushd /tmp
@@ -254,10 +267,13 @@ function setup_various
         return
     end
     flatpak install com.spotify.Client
-    flatpak install net.ankiweb.shell
+    # flatpak install net.ankiweb.shell
     flatpak install flathub com.discordapp.Discord
     flatpak install io.gitlab.azymohliad.WatchMate
-    flatpak install com.gitlab.newsflash
+    flatpak install io.gitlab.news_flash.NewsFlash
+    flatpak install flathub org.famistudio.FamiStudio
+    flatpak install org.kde.digikam
+    flatpak install io.bassi.Amberol
 
     install_package obsidian
     install_package foliate
@@ -266,6 +282,12 @@ function setup_various
     install_package bitwarden
     install_package switcheroo-control
     install_package just
+    install_package jq
+    install_package binance
+    install_package anytype
+
+    # UFRII driver for Canon printers
+    install_package cnrdrvcups-lb
 end
 
 function setup_fonts
@@ -372,12 +394,7 @@ end
 
 # Mega client
 function setup_mega_sync
-    if ! read_confirm "Setup MEGASync?"
-        return
-    end
-
-    install_package megasync-bin
-    install_package nautilus-megasync
+    echo "TO BE IMPLEMENTED"
 end
 
 # Gnome Extensions
@@ -390,6 +407,9 @@ function setup_gnome
     install_package gnome-calendar
     install_package gnome-font-viewer
     install_package gnome-characters
+    install_package gnome-clocks
+    install_package gnome-logs
+    install_package gnome-tweaks
 
     backup_and_link $SCRIPT_DIR/slideshows/Wallpapers $HOME/Pictures/Wallpapers
     backup_and_link $SCRIPT_DIR/slideshows/gnome-background-properties $HOME/.local/share/gnome-background-properties
@@ -428,6 +448,20 @@ setup_gnome
 # Run `flutter doctor`
 # Install Android SDK and SDK Commandline Tools
 # Accept licenses `flutter doctor --android-licenses`
+#
+# TODO: Things to add:
+# - nvidia-all
+# - backlight.rules
+#     ACTION=="add", SUBSYSTEM=="backlight", RUN+="/bin/chgrp video $sys$devpath/brightness", RUN+="/bin/chmod g+w $sys$devpath/brightness"
+# - Parameter to /etc/kernel/cmdline
+#     acpi_backlight=nvidia_wmi_ec 
+# - gcr-ssh-agent
+#     systemctl --user enable gcr-ssh-agent.socket
+#     systemctl --user enable gcr-ssh-agent.service
+#     systemctl --user start gcr-ssh-agent.service
+# - download mega from website and install 
+#     sudo pacman -U ~/Downloads/megasync-x86_64.pkg.tar.zst
+#     sudo pacman -U ~/Downloads/nautilus-megasync-x86_64.pkg.tar.zst
 
 echo "Other Thing To Do:"
 echo "- Sync Firefox account"
