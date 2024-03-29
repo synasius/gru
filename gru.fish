@@ -267,13 +267,14 @@ function setup_various
         return
     end
     flatpak install com.spotify.Client
-    # flatpak install net.ankiweb.shell
     flatpak install flathub com.discordapp.Discord
     flatpak install io.gitlab.azymohliad.WatchMate
     flatpak install io.gitlab.news_flash.NewsFlash
     flatpak install flathub org.famistudio.FamiStudio
     flatpak install org.kde.digikam
     flatpak install io.bassi.Amberol
+    flatpak install org.gnome.design.Lorem
+    flatpak install de.haeckerfelix.Fragments
 
     install_package obsidian
     install_package foliate
