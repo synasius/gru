@@ -1,0 +1,11 @@
+[user]
+	email = synasius@gmail.com
+	name = sinasio
+
+[alias]
+    st = status
+    ci = commit
+    co = checkout
+    br = branch
+    lg = log --color --graph --pretty=format:'%C(bold red)%h%Creset %C(auto)%d%Creset %C(magenta bold)%an %C(dim yellow)(%cr)%Creset\n%s' --abbrev-commit
+    lga = !git lg --all
