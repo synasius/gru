@@ -1,17 +1,70 @@
 [user]
-	email = synasius@gmail.com
-	name = sinasio
+  # These values are set in ~/.gitconfig.local
 
-[alias]
-    st = status
-    ci = commit
-    co = checkout
-    br = branch
-    lg = log --color --graph --pretty=format:'%C(bold red)%h%Creset %C(auto)%d%Creset %C(magenta bold)%an %C(dim yellow)(%cr)%Creset\n%s' --abbrev-commit
-    lga = !git lg --all
+[include]
+  path = ~/.gitconfig.local
+
+[column]
+	ui = auto
+
+[branch]
+	sort = -committerdate
+
+[tag]
+	sort = version:refname
 
 [init]
 	defaultBranch = main
+
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
+
+[push]
+	default = simple
+	autoSetupRemote = true
+	followTags = true
+
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
+
+[help]
+	autocorrect = prompt
+
+[commit]
+	verbose = true
+
+[rerere]
+	enabled = true
+	autoupdate = true
+
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
+
+[merge]
+	conflictstyle = zdiff3
+
+[pull]
+	rebase = true
+
+[core]
+	fsmonitor = true
+	untrackedCache = true
+
+[alias]
+  st = status
+  ci = commit
+  co = checkout
+  br = branch
+  lg = log --color --graph --pretty=format:'%C(bold red)%h%Creset %C(auto)%d%Creset %C(magenta bold)%an %C(dim yellow)(%cr)%Creset\n%s' --abbrev-commit
+  lga = !git lg --all
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
