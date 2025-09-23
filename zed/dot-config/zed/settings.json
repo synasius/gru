@@ -20,7 +20,7 @@
     "default_profile": "ask",
     "model_parameters": [],
     "default_model": {
-      "provider": "copilot_chat",
+      "provider": "zed.dev",
       "model": "claude-sonnet-4"
     }
   },
