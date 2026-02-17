@@ -7,7 +7,6 @@
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
-
 PS1='[\u@\h \W]\$ '
 
 if command -v fnm >/dev/null 2>&1; then
@@ -24,4 +23,4 @@ if command -v starship >/dev/null 2>&1; then
 
 fi
 
-export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"

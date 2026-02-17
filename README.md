@@ -1,15 +1,14 @@
 # gru
 A script to setup/update/manage packages, configurations and dotfiles
 
-## Usage
+### Stow usage
 
-First install `fish` shell and NVIDIA Drivers and reboot
+Assuming this repo is cloned in the user home:
 
-    yay -S fish
-    sudo nvidia-installer-dkms
+```
+# if repo is cloned in $HOME/.gru
+stow --dotfiles -S bash -v
 
-    sudo systemctl reboot
-
-Now from a `fish` shell run:
-
-    ./gru.fish
+# otherwise
+stow --dotfiles -S -t $HOME bash -v
+```
